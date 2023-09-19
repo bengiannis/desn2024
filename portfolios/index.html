@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DESN Portfolio Showcase</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="A collection of portfolios from third-year students in York University's design program.">
+    <meta name="keywords" content="york, design, desn, portfolio, portfolios, designers, university, yorku, toronto, canada, canadian, student, students">
+    <meta name="author" content="Ben Giannis">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <meta property="og:title" content="DESN Portfolio Showcase"/>
+    <meta property="og:description" content="A collection of portfolios from third-year students in York University's design program."/>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <header>
+        <h1>DESN Portfolio Showcase</h1>
+        <p>A collection of portfolios from third&#8209;year&nbsp;students in York University's&nbsp;design&nbsp;program.</p>
+        <div class="switch-container">
+            <label for="new-tab-checkbox">
+                <span class="switch-text">Open links in new tab</span>
+            </label>
+            <label class="switch">
+                <input type="checkbox" id="new-tab-checkbox" onclick="newTabToggled(event);" checked>
+                <span class="switch-background"></span>
+            </label>
+        </div>
+    </header>
+    <noscript>
+        <p class="loading-note" id="loading-note">Please enable JavaScript to load portfolios.</p>
+    </noscript>
+    <main id="portfolios">
+    </main>
+    <footer>
+        <p>Showcase assembled by <a href="https://bengiannis.com" title="bengiannis.com" target="_blank">Ben Giannis</a>.</p>
+    </footer>
+</body>
+
+<script src="./js/index.js"></script>
+
+</html>
