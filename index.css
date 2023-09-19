@@ -50,12 +50,6 @@ a {
     color: #e4e4e4;
     fill: #e4e4e4;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-a:hover {
-    opacity: 0.6;
-    fill: #e4e4e4;
 }
 
 .socials {
@@ -85,5 +79,14 @@ a:hover {
     .content {
         max-width: 1600px;
         margin: auto;
+    }
+}
+
+@media (pointer: fine) {
+    a {
+        transition: all 0.2s;
+    }
+    a:hover {
+        opacity: 0.6;
     }
 }
