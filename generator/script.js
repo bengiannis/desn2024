@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const resolutionSlider = document.getElementById("resolutionSlider");
     const resolutionSliderLabel = document.getElementById("resolutionSliderLabel");
+    const increaseContrastCheckbox = document.getElementById("increaseContrastCheckbox");
     const dropZone = document.getElementById('dropZone');
     const imageFileInput = document.getElementById('imageFile');
     const canvasBefore = document.getElementById('canvasBefore');
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const imgData = ctxBefore.getImageData(0, 0, width, height);
         const pixels = imgData.data;
-        const increaseContrast = document.getElementById('increaseContrastCheckbox').checked;
+        const increaseContrast = increaseContrastCheckbox.checked;
 
         // Create an array for the final transformed image
         const transformedPixels = new Uint8ClampedArray(width * height * 4 * (squareLength*squareLength));
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Trigger download of the transformed image
         const a = document.createElement('a');
         a.href = canvasAfter.toDataURL('image/png');
-        a.download = 'transformed_image.png';
+        a.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-C' : ''}-${file.name.split('.').slice(0, -1).join('.')}.png`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

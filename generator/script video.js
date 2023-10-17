@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const resolutionSlider = document.getElementById("resolutionSlider");
     const resolutionSliderLabel = document.getElementById("resolutionSliderLabel");
+    const increaseContrastCheckbox = document.getElementById("increaseContrastCheckbox");
     const dropZone = document.getElementById('dropZone');
     const imageFileInput = document.getElementById('imageFile');
     const canvasBefore = document.getElementById('canvasBefore');
@@ -11,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const squareLength = 9;
     let brightnessScale = 1;
     let specialCount = 0;
+    
+    const frameRate = 30;
 
     let currentSpecialIndex = 0;
 
@@ -74,23 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function generateVideo(file) {
         const frames = await captureFrames(file, frameRate);
+
+
     }
 
     async function convertImageToBitmap(img) {
-
-    }
-
-    async function generateImage(file) {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        await new Promise(resolve => {
-            img.onload = () => {
-                resolve();
-            };
-        });
-
-        convertImageToBitmap(img);
-
         const resolution = resolutionSlider.value;
 
         // Resize the image if its longest side is greater than desired resolution
@@ -122,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const imgData = ctxBefore.getImageData(0, 0, width, height);
         const pixels = imgData.data;
-        const increaseContrast = document.getElementById('increaseContrastCheckbox').checked;
+        const increaseContrast = increaseContrastCheckbox.checked;
 
         // Create an array for the final transformed image
         const transformedPixels = new Uint8ClampedArray(width * height * 4 * (squareLength*squareLength));
@@ -167,10 +158,32 @@ document.addEventListener('DOMContentLoaded', function() {
         newImgData.data.set(transformedPixels);
         ctxAfter.putImageData(newImgData, 0, 0);
 
+        const dataURL = canvas.toDataURL('image/png');
+        const img = new Image();
+        img.src = dataURL;
+        return img;
+    }
+
+    async function generateImage(file) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise(resolve => {
+            img.onload = () => {
+                resolve();
+            };
+        });
+
+        const convertedImage = convertImageToBitmap(img);
+
+        const link = document.createElement('a');
+        link.href = convertedImage.src;
+        link.download = 'canvas_image.png';
+        link.click();
+
         // Trigger download of the transformed image
         const a = document.createElement('a');
         a.href = canvasAfter.toDataURL('image/png');
-        a.download = 'transformed_image.png';
+        a.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-H' : ''}-${file.name.split('.').slice(0, -1).join('.')}.png`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
