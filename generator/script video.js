@@ -30,12 +30,57 @@ document.addEventListener('DOMContentLoaded', function() {
         specialCount = Object.keys(specialData).length;
     });
 
-    async function convertImage(file) {
-        if (!file) {
-            alert('Please upload an image first.');
-            return;
-        }
+    async function captureFrames(file, frameRate) {
+        return new Promise(async (resolve, reject) => {
+            const videoElement = document.createElement('video');
+            const objectURL = URL.createObjectURL(file);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const frames = [];
+        
+            videoElement.src = objectURL;
+            await videoElement.play();  // Autoplay requirement for some browsers
+        
+            videoElement.addEventListener('loadeddata', async () => {
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+        
+                const duration = videoElement.duration;
+                const totalFrames = Math.floor(duration * frameRate);
+        
+                for (let i = 0; i < totalFrames; i++) {
+                const currentTime = i / frameRate;
+        
+                // Seek to time and wait for 'seeked' event
+                await new Promise(r => {
+                    videoElement.addEventListener('seeked', r, { once: true });
+                    videoElement.currentTime = currentTime;
+                });
+        
+                // Draw frame on canvas
+                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        
+                // Convert to Image object
+                const img = new Image();
+                img.src = canvas.toDataURL();
+                frames.push(img);
+                }
+        
+                URL.revokeObjectURL(objectURL);  // Clean up
+                resolve(frames);
+            });
+        });
+    }
 
+    async function generateVideo(file) {
+        const frames = await captureFrames(file, frameRate);
+    }
+
+    async function convertImageToBitmap(img) {
+
+    }
+
+    async function generateImage(file) {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         await new Promise(resolve => {
@@ -43,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 resolve();
             };
         });
+
+        convertImageToBitmap(img);
 
         const resolution = resolutionSlider.value;
 
@@ -139,7 +186,12 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
         if (file) {
-            await convertImage(file);
+            if (file.type.startsWith('image/')) {
+                await generateImage(file);
+            }
+            else if (file.type.startsWith('video/')) {
+                await generateVideo(file);
+            }
         }
     });
 
@@ -155,7 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
     imageFileInput.addEventListener('change', async function() {
         const file = imageFileInput.files[0];
         if (file) {
-            await convertImage(file);
+            if (file.type.startsWith('image/')) {
+                await generateImage(file);
+            }
+            else if (file.type.startsWith('video/')) {
+                await generateVideo(file);
+            }
         }
     });
 });
