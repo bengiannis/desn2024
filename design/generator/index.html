@@ -2,14 +2,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image Transformer</title>
+    <title>Bitmap Image Generator</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="main">
+        <h1>Bitmap Image Generator</h1>
+        <div class="options">
+            <div>
+                <span>Resolution</span>
+                <input id="resolutionSlider" type="range" min="50" max="500" step="50" value="250">
+                <label id="resolutionSliderLabel"></label>
+            </div>
+            <div>
+                <span>Increase Contrast <span class="secondary-text">(Recommended)</span></span>
+                <input id="increaseContrastCheckbox" type="checkbox" checked>
+            </div>
+        </div>
         <div id="dropZone" class="drop-zone">
-            <h1>Image Transformer</h1>
             <p>Drop images here</p>
             <input type="file" id="imageFile" class="file-input" accept="image/*">
         </div>
@@ -17,10 +28,6 @@
             <canvas id="canvasBefore"></canvas>
             <canvas id="canvasAfter"></canvas>
         </div>
-    </div>
-    <div id="sidebar">
-        <h1>Image Transformer</h1>
-        <p>Drop an image below to transform it.</p>
     </div>
 
     <script src="script.js"></script>
