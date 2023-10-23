@@ -12,11 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const squareLength = 9;
     let brightnessScale = 1;
     let specialCount = 0;
+    
+    const frameRate = 30;
 
     let currentSpecialIndex = 0;
 
     let pixelData = {}
-    fetch('pixels.json')
+    fetch('/design/pixels.json')
     .then(response => response.json())
     .then(data => {
         pixelData = data;
@@ -24,27 +26,139 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     let specialData = {}
-    fetch('special.json')
+    fetch('/design/special.json')
     .then(response => response.json())
     .then(data => {
         specialData = data;
         specialCount = Object.keys(specialData).length;
     });
 
-    async function convertImage(file) {
-        if (!file) {
-            alert('Please upload an image first.');
-            return;
+    /*async function captureFrames(file) {
+        return new Promise(async (resolve, reject) => {
+            const videoElement = document.createElement('video');
+            const objectURL = URL.createObjectURL(file);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            document.body.appendChild(canvas)
+            canvas.style.background = "black"
+            const frames = [];
+        
+            videoElement.src = objectURL;
+            await videoElement.play();  // Autoplay requirement for some browsers
+        
+            videoElement.addEventListener('loadeddata', async () => {
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+        
+                const duration = videoElement.duration;
+                const totalFrames = Math.floor(duration * frameRate);
+        
+                for (let i = 0; i < totalFrames; i++) {
+                const currentTime = i / frameRate;
+        
+                // Seek to time and wait for 'seeked' event
+                await new Promise(r => {
+                    videoElement.addEventListener('seeked', r, { once: true });
+                    videoElement.currentTime = currentTime;
+                });
+        
+                // Draw frame on canvas
+                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        
+                // Convert to Image object
+                const img = new Image();
+                img.src = canvas.toDataURL();
+                frames.push(img);
+                }
+        
+                URL.revokeObjectURL(objectURL);  // Clean up
+                resolve(frames);
+            });
+        });
+    }*/
+
+    async function captureFrames(file) {
+        return new Promise((resolve, reject) => {
+            const frames = [];
+            const video = document.createElement('video');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+        
+            video.src = URL.createObjectURL(file);
+            video.load();
+        
+            console.log("starting")
+        
+            video.addEventListener('loadedmetadata', () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            });
+        
+            video.addEventListener('loadeddata', async () => {
+                console.log("loaddata")
+                let currentTime = 0;
+                const interval = 1 / 30; // You can change the interval
+        
+                while (currentTime < video.duration) {
+                console.log((currentTime / video.duration * 100) + "%");
+                video.currentTime = currentTime;
+                await new Promise(r => video.addEventListener('seeked', r, { once: true }));
+        
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const img = new Image();
+                img.src = canvas.toDataURL();
+                await new Promise(r => img.addEventListener('load', r, { once: true }));
+        
+                frames.push(img);
+                currentTime += interval;
+                }
+        
+                resolve(frames);
+            });
+        
+            video.addEventListener('error', (e) => {
+                reject(e);
+            });
+        });
+    }
+
+    async function generateVideo(file) {
+        const frames = await captureFrames(file, frameRate);
+
+        const encoder = new Whammy.Video(frameRate);
+
+        for (let frame of frames) {
+            // console.log(frame);
+            const convertedFrame = await convertImageToBitmap(frame);
+
+            const img = new Image();
+            img.src = frame;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Draw image onto canvas
+                ctx.drawImage(img, 0, 0);
+    
+                // Add this frame to encoder
+                encoder.add(ctx);
+            };
         }
 
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        await new Promise(resolve => {
-            img.onload = () => {
-                resolve();
-            };
-        });
+        console.log("boo");
 
+        encoder.compile(false, function(output) {
+            const url = URL.createObjectURL(output);
+    
+            // // Do something with the video URL (e.g., download it)
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-H' : ''}-${file.name.split('.').slice(0, -1).join('.')}.webm`;
+            // a.click();
+        });
+    }
+
+    async function convertImageToBitmap(img) {
         const resolution = resolutionSlider.value;
 
         // Resize the image if its longest side is greater than desired resolution
@@ -121,13 +235,30 @@ document.addEventListener('DOMContentLoaded', function() {
         newImgData.data.set(transformedPixels);
         ctxAfter.putImageData(newImgData, 0, 0);
 
+        const dataURL = canvasAfter.toDataURL('image/png');
+        return dataURL;
+        console.log("HAHAHA", dataURL)
+        const newImg = new Image();
+        newImg.src = dataURL;
+        return newImg;
+    }
+
+    async function generateImage(file) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise(resolve => {
+            img.onload = () => {
+                resolve();
+            };
+        });
+
+        const convertedImage = await convertImageToBitmap(img);
+
         // Trigger download of the transformed image
-        const a = document.createElement('a');
-        a.href = canvasAfter.toDataURL('image/png');
-        a.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-C' : ''}-${file.name.split('.').slice(0, -1).join('.')}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        const link = document.createElement('a');
+        link.href = convertedImage;
+        link.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-H' : ''}-${file.name.split('.').slice(0, -1).join('.')}.png`;
+        link.click();
     }
 
     // Add drag-and-drop and file input functionalities
@@ -140,7 +271,12 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
         if (file) {
-            await convertImage(file);
+            if (file.type.startsWith('image/')) {
+                await generateImage(file);
+            }
+            else if (file.type.startsWith('video/')) {
+                await generateVideo(file);
+            }
         }
     });
 
@@ -153,10 +289,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     resolutionSliderLabel.textContent = resolutionSlider.value;
 
-    imageFileInput.addEventListener('change', async function() {
+    imageFileInput.addEventListener('change', async function(event) {
+        event.preventDefault();
         const file = imageFileInput.files[0];
         if (file) {
-            await convertImage(file);
+            if (file.type.startsWith('image/')) {
+                await generateImage(file);
+            }
+            else if (file.type.startsWith('video/')) {
+                await generateVideo(file);
+            }
         }
     });
 });
