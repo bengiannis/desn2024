@@ -91,7 +91,7 @@ function draw() {
   for (let y = 0; y < rows; y++) {
     currentSpecialIndex = y % specialImages.length;;
     for (let x = 0; x < cols; x++) {
-      let noiseValue = perlinNoise([x, y, noiseZ], 0.01, 3, 0.5);
+      let noiseValue = perlinNoise([x, y, noiseZ], 25/(width + height), 3, 0.5);
       noiseValue = (1 - Math.cos(Math.PI * Math.max(0, Math.min(noiseValue / 0.5 - 0.8, 1)))) / 2;
       let brightness = Math.floor(noiseValue * 100).toString();
 
