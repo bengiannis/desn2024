@@ -1,5 +1,5 @@
 let noiseZ = 0;
-let noiseZIncrement = 0.1;
+let noiseZSpeed = 0.2;
 let transitionCanvas;
 let imageCache = {};
 let specialImages = [];
@@ -9,7 +9,7 @@ let loaded = false;
 
 // Define the perlinNoise function
 function perlinNoise(coordinate, scale, detail = 1, roughness = 0) {
-  let [x, y, z = 0] = coordinate;
+  let [x, y = 0, z = 0] = coordinate;
   let frequency = 1;
   let amplitude = 1;
   let output = 0;
@@ -71,7 +71,8 @@ async function setup() {
   await loadData(); // Wait for the data to load before setting up canvas
   transitionCanvas = createCanvas(window.innerWidth, window.innerHeight);
   transitionCanvas.parent('transition-canvas-container');
-  noSmooth()
+  noSmooth();
+  frameRate(30);
 }
 
 function windowResized() {
@@ -91,8 +92,21 @@ function draw() {
   for (let y = 0; y < rows; y++) {
     currentSpecialIndex = y % specialImages.length;;
     for (let x = 0; x < cols; x++) {
-      let noiseValue = perlinNoise([x, y, noiseZ], 25/(width + height), 3, 0.5);
-      noiseValue = (1 - Math.cos(Math.PI * Math.max(0, Math.min(noiseValue / 0.5 - 0.8, 1)))) / 2;
+      let xWarp = perlinNoise([x, y, noiseZ], 10/(width + height), 1, 0.5);
+      let yWarp = perlinNoise([x+500, y + 500, noiseZ], 10/(width + height), 1, 0.5);
+      let distortedX = x + (500*xWarp)
+      let distortedY = y + (500*yWarp)
+
+      let noiseValue = perlinNoise([distortedX, distortedY, noiseZ], 20/(width + height), 2, 0.3);
+
+      // noiseValue = Math.max(0, Math.sin(distortedX/2)) + Math.max(0, Math.sin(distortedY/2))
+      // noiseValue = (1 - Math.cos(Math.PI * Math.max(0, Math.min(noiseValue / 0.6 - 0.2, 1)))) / 2;
+      // console.log(noiseValue);
+      // noiseValue = 1 - Math.sqrt(3 * Math.abs(noiseValue - 0.5));
+      // noiseValue = 2 / (15 * Math.abs(noiseValue - 0.5) + 1) - 1;
+      noiseValue = Math.pow(2 * Math.max(0, noiseValue - 0.4), 2);
+      noiseValue = Math.max(0, Math.min(noiseValue, 1))
+      //noiseValue = Math.pow(Math.sin(Math.PI * noiseValue), 9);
       let brightness = Math.floor(noiseValue * 100).toString();
 
       let img;
@@ -106,5 +120,6 @@ function draw() {
       image(img, x * 9, y * 9);
     }
   }
-  noiseZ += noiseZIncrement;
+
+  noiseZ += noiseZSpeed + noiseZSpeed*(width + height)/10000;
 }
