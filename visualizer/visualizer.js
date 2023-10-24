@@ -70,7 +70,7 @@ function createImageFromData(data) {
 async function setup() {
   await loadData(); // Wait for the data to load before setting up canvas
   transitionCanvas = createCanvas(window.innerWidth, window.innerHeight);
-  transitionCanvas.parent('transition-canvas-container');
+  transitionCanvas.parent('visualizer');
   noSmooth();
   frameRate(30);
 }
@@ -90,10 +90,10 @@ function draw() {
   const rows = Math.ceil(height / 9);
 
   for (let y = 0; y < rows; y++) {
-    currentSpecialIndex = y % specialImages.length;;
+    currentSpecialIndex = y % specialImages.length;
     for (let x = 0; x < cols; x++) {
       let xWarp = perlinNoise([x, y, noiseZ], 10/(width + height), 1, 0.5);
-      let yWarp = perlinNoise([x+500, y + 500, noiseZ], 10/(width + height), 1, 0.5);
+      let yWarp = perlinNoise([x+500.141, y + 500.141, noiseZ], 10/(width + height), 1, 0.5);
       let distortedX = x + (500*xWarp)
       let distortedY = y + (500*yWarp)
 
@@ -107,6 +107,7 @@ function draw() {
       noiseValue = Math.pow(2 * Math.max(0, noiseValue - 0.4), 2);
       noiseValue = Math.max(0, Math.min(noiseValue, 1))
       //noiseValue = Math.pow(Math.sin(Math.PI * noiseValue), 9);
+
       let brightness = Math.floor(noiseValue * 100).toString();
 
       let img;
@@ -121,5 +122,5 @@ function draw() {
     }
   }
 
-  noiseZ += noiseZSpeed + noiseZSpeed*(width + height)/10000;
+  noiseZ += noiseZSpeed + noiseZSpeed*(width + height)/9999;
 }
