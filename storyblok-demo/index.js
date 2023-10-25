@@ -1,49 +1,57 @@
-const { StoryblokBridge } = window
-const storyblokInstance = new StoryblokBridge()
- 
-storyblokInstance.on(['published', 'change'], () => {
-    // reload page if save or publish is clicked
-    location.reload(true)
-})
+const { StoryblokBridge } = window;
+const storyblokInstance = new StoryblokBridge();
+storyblokInstance.on(['published', 'change'], () => location.reload(true));
+
+const apiUrl = "https://api-us.storyblok.com/v2/cdn/stories/storyblok-demo";
 
 
-// Call pingEditor to see if the user is in the editor
-storyblokInstance.pingEditor(() => {
-    if (storyblokInstance.isInEditor()) {
-        // load the draft version
-        fetch("https://api-us.storyblok.com/v2/cdn/stories/storyblok-demo?version=draft&token=Fm5wlsy8rzc1dPxqi1rs9gtt")
-        .then(response => response.json())
-        .then(data => {
-            const bodyContent = data.story.content.body;
-            const mainElement = document.querySelector("main");
-            
-            bodyContent.forEach(item => {
-            const paragraph = document.createElement("p");
-            paragraph.textContent = item.Text;
-            mainElement.appendChild(paragraph);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
+/* ~~~~~~~~~~ Components ~~~~~~~~~~ */
+
+const components = {
+    'paragraph': generateParagraph,
+    // Add more mappings here
+};
+
+
+/* ~~~~~~~~~~ Component Generators ~~~~~~~~~~ */
+
+function generateParagraph(content) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = content.Text;
+
+    return paragraph;
+}
+
+
+
+
+/* ~~~~~~~~~~ Page Builder ~~~~~~~~~~ */
+
+const rootElement = document.querySelector("main");
+
+
+async function fetchDataAndRender(version) {
+    const editing = await isInEditor();
+
+    fetch(`${apiUrl}?token=Fm5wlsy8rzc1dPxqi1rs9gtt&version=${editing ? "draft" : "published"}`)
+    .then(response => response.json())
+    .then(data => {
+        const { body } = data.story.content;
+
+        body.forEach(item => {
+            let component = components[item.component](item);
+            rootElement.appendChild(component);
         });
-    } else {
-        // load the published version
-        fetch("https://api-us.storyblok.com/v2/cdn/stories/storyblok-demo?token=Fm5wlsy8rzc1dPxqi1rs9gtt")
-        .then(response => response.json())
-        .then(data => {
-            const bodyContent = data.story.content.body;
-            const mainElement = document.querySelector("main");
-            
-            bodyContent.forEach(item => {
-            const paragraph = document.createElement("p");
-            paragraph.textContent = item.Text;
-            mainElement.appendChild(paragraph);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
+    })
+    .catch(error => console.error("Error fetching data:", error));
+};
+
+async function isInEditor() {
+    return new Promise((resolve) => {
+        storyblokInstance.pingEditor(() => {
+            resolve(storyblokInstance.isInEditor());
         });
-    }
-})
+    });
+}
 
-
+fetchDataAndRender();
