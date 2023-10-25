@@ -1,4 +1,4 @@
-fetch("https://api-us.storyblok.com/v2/cdn/stories/bengiannis?token=Fm5wlsy8rzc1dPxqi1rs9gtt")
+fetch("https://api-us.storyblok.com/v2/cdn/stories/storyblok-demo?token=Fm5wlsy8rzc1dPxqi1rs9gtt")
   .then(response => response.json())
   .then(data => {
     const bodyContent = data.story.content.body;
