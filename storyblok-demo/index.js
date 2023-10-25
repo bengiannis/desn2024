@@ -1,9 +1,9 @@
-const { StoryblokBridge, location } = window
+const { StoryblokBridge, storyblokLocation } = window
 const storyblokInstance = new StoryblokBridge()
  
 storyblokInstance.on(['published', 'change'], () => {
     // reload page if save or publish is clicked
-    location.reload(true)
+    storyblokLocation.reload(true)
 })
 
 
