@@ -7,6 +7,13 @@ let pixelData, specialData;
 
 let loaded = false;
 
+let lastExposure = 100;
+let exposure = 0;
+let exposureCount = 0;
+
+let xOffset = 0;
+let yOffset = 0;
+
 // Define the perlinNoise function
 function perlinNoise(coordinate, scale, detail = 1, roughness = 0) {
   let [x, y = 0, z = 0] = coordinate;
@@ -67,6 +74,11 @@ function createImageFromData(data) {
   return img;
 }
 
+// document.addEventListener('wheel', function(event) {
+//   xOffset += event.deltaX*0.2;
+//   yOffset += event.deltaY*0.2;
+// });
+
 async function setup() {
   await loadData(); // Wait for the data to load before setting up canvas
   transitionCanvas = createCanvas(window.innerWidth, window.innerHeight);
@@ -89,24 +101,28 @@ function draw() {
   const cols = Math.ceil(width / 9);
   const rows = Math.ceil(height / 9);
 
-  for (let y = 0; y < rows; y++) {
-    currentSpecialIndex = y % specialImages.length;
-    for (let x = 0; x < cols; x++) {
-      let xWarp = perlinNoise([x, y, noiseZ], 10/(width + height), 1, 0.5);
-      let yWarp = perlinNoise([x+500.141, y + 500.141, noiseZ], 10/(width + height), 1, 0.5);
+  for (let yReal = 0; yReal < rows; yReal++) {
+    const y = yReal + yOffset;
+    currentSpecialIndex = yReal % specialImages.length;
+    for (let xReal = 0; xReal < cols; xReal++) {
+      const x = xReal + xOffset;
+
+      let xWarp = perlinNoise([x, y, 2*noiseZ], 10/(width + height), 1, 0.5);
+      let yWarp = perlinNoise([x+500.141, y + 500.141, 2*noiseZ], 10/(width + height), 1, 0.5);
       let distortedX = x + (500*xWarp)
       let distortedY = y + (500*yWarp)
 
-      let noiseValue = perlinNoise([distortedX, distortedY, noiseZ], 20/(width + height), 2, 0.3);
+      let noiseValue = perlinNoise([distortedX, distortedY, noiseZ], 5/(width + height), 4, 0.9);
+      
+      if (yReal == xReal || yReal == cols-xReal) {
+        exposure += noiseValue;
+        exposureCount++;
+      }
+      
+      noiseValue -= lastExposure;
 
-      // noiseValue = Math.max(0, Math.sin(distortedX/2)) + Math.max(0, Math.sin(distortedY/2))
-      // noiseValue = (1 - Math.cos(Math.PI * Math.max(0, Math.min(noiseValue / 0.6 - 0.2, 1)))) / 2;
-      // console.log(noiseValue);
-      // noiseValue = 1 - Math.sqrt(3 * Math.abs(noiseValue - 0.5));
-      // noiseValue = 2 / (15 * Math.abs(noiseValue - 0.5) + 1) - 1;
-      noiseValue = Math.pow(2 * Math.max(0, noiseValue - 0.4), 2);
-      noiseValue = Math.max(0, Math.min(noiseValue, 1))
-      //noiseValue = Math.pow(Math.sin(Math.PI * noiseValue), 9);
+      noiseValue = Math.pow(4 * Math.max(0, noiseValue - 0.5), 2);
+      noiseValue = Math.max(0, Math.min(noiseValue, 1));
 
       let brightness = Math.floor(noiseValue * 100).toString();
 
@@ -118,9 +134,15 @@ function draw() {
         img = imageCache[brightness];
       }
 
-      image(img, x * 9, y * 9);
+      image(img, xReal * 9, yReal * 9);
     }
   }
+
+  lastExposure = exposure/exposureCount-0.5;
+  exposure = 0;
+  exposureCount = 0;
+
+  console.log(lastExposure);
 
   noiseZ += noiseZSpeed + noiseZSpeed*(width + height)/9999;
 }
