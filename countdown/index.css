@@ -30,9 +30,9 @@ body {
 
 header {
     position: absolute;
-    top: 27px;
-    left: 27px;
-    right: 27px;
+    top: max(27px, env(safe-area-inset-top));
+    left: max(27px, env(safe-area-inset-left));
+    right: max(27px, env(safe-area-inset-right));
 }
 
 main {
@@ -49,9 +49,9 @@ main {
 
 footer {
     position: absolute;
-    bottom: 27px;
-    left: 27px;
-    right: 27px;
+    bottom: max(27px, env(safe-area-inset-bottom));
+    left: max(27px, env(safe-area-inset-left));
+    right: max(27px, env(safe-area-inset-right));
     display: flex;
     gap: 2rem;
     align-items: center;
