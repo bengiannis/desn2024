@@ -101,18 +101,20 @@ function draw() {
   const cols = Math.ceil(width / 9);
   const rows = Math.ceil(height / 9);
 
+  // console.log(noiseZ);
+
   for (let yReal = 0; yReal < rows; yReal++) {
     const y = yReal + yOffset;
     currentSpecialIndex = yReal % specialImages.length;
     for (let xReal = 0; xReal < cols; xReal++) {
       const x = xReal + xOffset;
 
-      let xWarp = perlinNoise([x, y, 2*noiseZ], 10/(width + height), 1, 0.5);
-      let yWarp = perlinNoise([x+500.141, y + 500.141, 2*noiseZ], 10/(width + height), 1, 0.5);
+      let xWarp = perlinNoise([x, y, 2*noiseZ], 10.0909/(width + height), 1, 0.5);
+      let yWarp = perlinNoise([x+500.141, y + 500.141, 2*noiseZ], 10.0769/(width + height), 1, 0.5);
       let distortedX = x + (500*xWarp)
       let distortedY = y + (500*yWarp)
 
-      let noiseValue = perlinNoise([distortedX, distortedY, noiseZ], 5/(width + height), 4, 0.9);
+      let noiseValue = perlinNoise([distortedX, distortedY, noiseZ], 5.0588/(width + height), 4, 0.9);
       
       if (yReal == xReal || yReal == cols-xReal) {
         exposure += noiseValue;
@@ -141,8 +143,6 @@ function draw() {
   lastExposure = exposure/exposureCount-0.5;
   exposure = 0;
   exposureCount = 0;
-
-  console.log(lastExposure);
 
   noiseZ += noiseZSpeed + noiseZSpeed*(width + height)/9999;
 }
