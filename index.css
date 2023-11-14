@@ -1,91 +1,130 @@
+@font-face {
+    font-family: 'DSEG7';
+    src: url('/fonts/DSEG7/DSEG7Classic-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'FKRasterRomanCompact-Blended';
+    src: url('/fonts/FKRasterRomanCompact/FKRasterRomanCompact-Blended.woff2') format('woff2');
+}
+
 html, body {
-    background-color: #0f0f0f;
-    color: #e4e4e4;
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    margin: 0;
+    background-color: #090F17;
+    color: #F3F4FA;
 }
 
 body {
-    padding: 2rem;
-    height: calc(100svh - 4rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 2rem;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
 }
 
-::selection {
-    background: #ffffff22;
+#visualizer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -100;
+}
+
+header {
+    position: absolute;
+    top: max(27px, env(safe-area-inset-top));
+    left: max(27px, env(safe-area-inset-left));
+    right: max(27px, env(safe-area-inset-right));
 }
 
 main {
-    margin-bottom: 5svh;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-h1, .date {
-    margin: 0;
-    padding: 0;
+footer {
+    position: absolute;
+    bottom: max(27px, env(safe-area-inset-bottom));
+    left: max(27px, env(safe-area-inset-left));
+    right: max(27px, env(safe-area-inset-right));
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
 }
 
-h1 {
-    font-size: 2.5rem;
-    font-weight: 400;
-    letter-spacing: -0.04em;
-    line-height: 1.125em;
+.info-typography {
+    font-family: "FKRasterRomanCompact-Blended", sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    line-height: 1.25em;
 }
 
-.date {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #7a7a7a;
-    letter-spacing: 0.02em;
-    line-height: 1em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
+.location {
+    text-align: right;
 }
 
-a {
-    color: #e4e4e4;
-    fill: #e4e4e4;
-    cursor: pointer;
-}
-
-.socials {
+.countdown {
     display: flex;
     gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
-.instagram-link svg {
-    height: 1.5rem;
-    cursor: pointer;
+.countdown-component {
+    position: relative;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: baseline;
+    gap: 0.25rem;
 }
 
-.coming-soon {
-    font-size: 1rem;
-    font-weight: 500;
+.countdown-component-value {
+    /* font-family: 'DSEG7', sans-serif; */
+    font-family: "FKRasterRomanCompact-Blended", sans-serif;
+    font-size: 54px;
     line-height: 1em;
-    color: #373737;
+    text-rendering: geometricPrecision;
+    font-variant-numeric: tabular-nums;
+    /* position: absolute; */
 }
 
-@media (max-width: 390px) {
-    h1 {
-        font-size: 2rem;
+.countdown-component-ghost {
+    color: hsla(0deg, 0%, 25%, 60%);
+    position: absolute;
+    z-index: -1;
+    user-select: none;
+    display: none;
+}
+
+.countdown-component-unit {
+    opacity: 1;
+    font-size: 12px;
+    line-height: 1em;
+}
+
+
+@media (min-width: 480px) {
+    .countdown {
+        flex-direction: row;
     }
 }
 
-@media (min-width: 1920px) {
-    .content {
-        max-width: 1600px;
-        margin: auto;
+@media (min-width: 768px) {
+    .countdown {
+        gap: 2rem;
     }
 }
 
-@media (pointer: fine) {
-    a {
-        transition: all 0.2s;
-    }
-    a:hover {
-        opacity: 0.6;
+@media (min-width: 1200px) {
+    .countdown-component-value {
+        font-size: 70px;
     }
 }

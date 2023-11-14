@@ -60,13 +60,14 @@ async function loadData() {
 function createImageFromData(data) {
   const img = createImage(9, 9);
   img.loadPixels();
+
   for (let x = 0; x < 9; x++) {
     for (let y = 0; y < 9; y++) {
-      let brightness = data[y][x] * 255;
+      const color = data[y][x] === 1 ? [243, 244, 250] : [9, 15, 23];
       let index = 4 * (y * 9 + x);
-      img.pixels[index] = brightness;
-      img.pixels[index + 1] = brightness;
-      img.pixels[index + 2] = brightness;
+      img.pixels[index] = color[0];
+      img.pixels[index + 1] = color[1];
+      img.pixels[index + 2] = color[2];
       img.pixels[index + 3] = 255;
     }
   }
@@ -85,10 +86,16 @@ async function setup() {
   transitionCanvas.parent('visualizer');
   noSmooth();
   frameRate(30);
+  windowResized();
 }
 
 function windowResized() {
-  resizeCanvas(window.innerWidth, window.innerHeight);
+  const threshold = 1440000; // 1200 * 1200
+  const area = window.innerWidth * window.innerHeight;
+  const resizeFactor = area > threshold ? Math.sqrt(area / threshold) : 1;
+  resizeCanvas(window.innerWidth/resizeFactor, window.innerHeight/resizeFactor);
+  transitionCanvas.canvas.style.transform = "scale(" + resizeFactor + ")";
+  transitionCanvas.canvas.style.transformOrigin = "0 0";
 }
 
 function draw() {
