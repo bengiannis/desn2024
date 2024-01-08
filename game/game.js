@@ -125,7 +125,7 @@ function showGameOver() {
   const fontSize = 50 * scaleRatio;
   ctx.font = `${fontSize}px FKRasterRomanCompact-Blended`;
   ctx.fillStyle = "#F3F4FA";
-  const x = canvas.width * 0.3;
+  const x = canvas.width * 0.31;
   const y = canvas.height * 0.6;
   ctx.fillText("GAME OVER", x, y);
 }
@@ -155,9 +155,9 @@ function showStartGameText() {
   const fontSize = 30 * scaleRatio;
   ctx.font = `${fontSize}px FKRasterRomanCompact-Blended`;
   ctx.fillStyle = "#F3F4FA";
-  const x = canvas.width * 0.22;
+  const x = canvas.width * 0.34;
   const y = canvas.height * 0.55;
-  ctx.fillText("Tap Screen or Press Space To Start", x, y);
+  ctx.fillText("Press Space To Start", x, y);
 }
 
 function updateGameSpeed(frameTimeDelta) {
@@ -197,6 +197,13 @@ function gameLoop(currentTime) {
 
   if (!gameOver && cactiController.collideWith(player)) {
     gameOver = true;
+
+    const element = document.getElementById('game-death-bg');
+    element.classList.add('flash-animation');
+    element.addEventListener('animationend', function() {
+        element.classList.remove('flash-animation');
+    });
+
     setupGameReset();
     score.setHighScore();
   }

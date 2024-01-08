@@ -26,7 +26,7 @@ function updateCountdown() {
     }
 }
 
-document.getElementById('game-toggle').onclick = function () {
+function setGameMode(mode) {
     if (isAnimatingToGameMode) {
         return;
     }
@@ -36,33 +36,31 @@ document.getElementById('game-toggle').onclick = function () {
         isAnimatingToGameMode = false;
     }, 700);
 
-    if (!gameIsRunning) {
+    if (mode) {
         // start game
         gameIsRunning = true;
-
         resetGameToInitialState();
-
         setVisualizationMultiplier(0.1);
         document.body.classList.add("game-mode");
-
         setTimeout(() => {
             document.getElementById("game").classList.add("showing");
         }, 200);
-    }
-    else {
+    } else {
         // close game
         gameIsRunning = false;
-
         setVisualizationMultiplier(1);
         document.getElementById("game").classList.remove("showing");
         setTimeout(() => {
             document.body.classList.remove("game-mode");
         }, 200);
-
         setTimeout(() => {
             resetGameToInitialState();
         }, 700);
     }
+}
+
+document.getElementById('game-toggle').onclick = function () {
+    setGameMode(!gameIsRunning);
 };
 
 function setVisualizationMultiplier(newMultiplier) {
@@ -77,6 +75,12 @@ function setVisualizationMultiplier(newMultiplier) {
         }, i * (duration / steps));
     }
 }
+
+window.addEventListener('resize', function() {
+    if (window.innerWidth < 768) {
+        setGameMode(false);
+    }
+});
 
 // Update every second
 updateCountdown();
