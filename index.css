@@ -6,6 +6,7 @@
 @font-face {
     font-family: 'FKRasterRomanCompact-Blended';
     src: url('/fonts/FKRasterRomanCompact/FKRasterRomanCompact-Blended.woff2') format('woff2');
+    font-variation-settings: 'MONO' 1;
 }
 
 html, body {
@@ -33,6 +34,63 @@ header {
     top: max(27px, env(safe-area-inset-top));
     left: max(27px, env(safe-area-inset-left));
     right: max(27px, env(safe-area-inset-right));
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 1;
+}
+
+.logo {
+    height: 2rem;
+    width: 9.8rem;
+    object-fit: cover;
+    object-position: left;
+    transition: width 0.5s;
+}
+
+#game-toggle {
+    cursor: pointer;
+    height: 2.2rem;
+    width: 2.2rem;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    display: none;
+}
+
+.game-mode #game-toggle {
+    transform: translateX(-1.5rem);
+}
+
+#game-toggle * {
+    position: absolute;
+    fill: #001ED1;
+    height: 100%;
+    width: 100%;
+}
+
+#game-toggle:hover * {
+    fill: #334BDA;
+}
+
+.game-mode #game-toggle * {
+    fill: #F20089;
+}
+
+.game-mode #game-toggle:hover * {
+    fill: #F533A1;
+}
+
+.game-mode #stop-button {
+    opacity: 1;
+}
+
+#play-button {
+    transition: fill 0.1s;
+}
+
+#stop-button {
+    opacity: 0;
+    transition: fill 0.1s, opacity 0.25s;
 }
 
 main {
@@ -56,6 +114,7 @@ footer {
     gap: 2rem;
     align-items: center;
     justify-content: space-between;
+    transition: opacity 0.5s;
 }
 
 .info-typography {
@@ -81,6 +140,7 @@ footer {
     justify-content: center;
     flex-wrap: wrap;
     flex-direction: column;
+    transition: display 0.5s, opacity 0.5s;
 }
 
 .countdown-component {
@@ -115,6 +175,34 @@ footer {
     line-height: 1em;
 }
 
+#game {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.5s, opacity 0.5s;
+}
+
+.game-mode .countdown {
+    opacity: 0;
+}
+
+.game-mode .countdown {
+    opacity: 0;
+}
+
+.game-mode footer {
+    opacity: 0;
+}
+
+#game.showing {
+    visibility: visible;
+    opacity: 1;
+}
+
+.game-mode .logo {
+    width: 0;
+}
+
 
 @media (min-width: 480px) {
     .countdown {
@@ -128,6 +216,9 @@ footer {
     }
     .info-typography.location {
         max-width: initial;
+    }
+    #game-toggle {
+        display: initial;
     }
 }
 

@@ -1,3 +1,8 @@
+import { resetGameToInitialState } from "/game/game.js";
+
+let gameIsRunning = false;
+let isAnimatingToGameMode = false;
+
 function updateCountdown() {
     const targetDate = new Date("April 18, 2024 00:00:00").getTime();
     const now = new Date().getTime();
@@ -18,6 +23,58 @@ function updateCountdown() {
     } else {
         // Countdown is over, do something
         console.log("Time's up!");
+    }
+}
+
+document.getElementById('game-toggle').onclick = function () {
+    if (isAnimatingToGameMode) {
+        return;
+    }
+
+    isAnimatingToGameMode = true;
+    setTimeout(() => {
+        isAnimatingToGameMode = false;
+    }, 700);
+
+    if (!gameIsRunning) {
+        // start game
+        gameIsRunning = true;
+
+        resetGameToInitialState();
+
+        setVisualizationMultiplier(0.1);
+        document.body.classList.add("game-mode");
+
+        setTimeout(() => {
+            document.getElementById("game").classList.add("showing");
+        }, 200);
+    }
+    else {
+        // close game
+        gameIsRunning = false;
+
+        setVisualizationMultiplier(1);
+        document.getElementById("game").classList.remove("showing");
+        setTimeout(() => {
+            document.body.classList.remove("game-mode");
+        }, 200);
+
+        setTimeout(() => {
+            resetGameToInitialState();
+        }, 700);
+    }
+};
+
+function setVisualizationMultiplier(newMultiplier) {
+    //animate visualization multiplier
+
+    let start = multiplier, end = newMultiplier, duration = 1000, steps = 60;
+    for (let i = 0; i <= steps; i++) {
+        setTimeout(() => {
+            let x = i / steps;
+            let easing = (1 - Math.cos(Math.PI * x)) / 2;
+            multiplier = start + (end - start) * easing;
+        }, i * (duration / steps));
     }
 }
 

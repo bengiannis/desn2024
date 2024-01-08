@@ -11,6 +11,9 @@ let lastExposure = 100;
 let exposure = 0;
 let exposureCount = 0;
 
+let exposureOffset = 0;
+let multiplier = 1;
+
 let xOffset = 0;
 let yOffset = 0;
 
@@ -128,12 +131,12 @@ function draw() {
         exposureCount++;
       }
       
-      noiseValue -= lastExposure;
+      noiseValue -= lastExposure - exposureOffset;
 
       noiseValue = Math.pow(4 * Math.max(0, noiseValue - 0.5), 2);
       noiseValue = Math.max(0, Math.min(noiseValue, 1));
 
-      let brightness = Math.floor(noiseValue * 100).toString();
+      let brightness = Math.floor(noiseValue * multiplier * 100).toString();
 
       let img;
       if (Math.abs(specialImages[currentSpecialIndex]["brightness"] - brightness) < 5) {

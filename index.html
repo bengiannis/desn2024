@@ -7,11 +7,22 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js"></script>
     <script src="/visualizer/visualizer.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="/game/game.js" type="module" defer></script>
+    <script src="index.js" type="module" defer></script>
 </head>
 <body>
     <header>
-        <div class="info-typography logomark">DESN 2024</div>
+        <a href="/">
+            <img class="logo" src="/images/Resolution_Wordmark-Icon.svg"></img>
+        </a>
+        <div id="game-toggle">
+            <svg id="play-button" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M170.029 88.2786C179.052 93.4881 179.052 106.512 170.029 111.721L20.302 198.167C11.2789 203.376 -4.55429e-07 196.864 0 186.445L7.55727e-06 13.5549C8.0127e-06 3.13587 11.2789 -3.37601 20.302 1.83349L170.029 88.2786Z"/>
+            </svg>
+            <svg id="stop-button" width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="200" height="200" rx="14" fill="white"/>
+            </svg>
+        </div>
     </header>
     <main>
         <div class="countdown">
@@ -41,6 +52,7 @@
                 <div class="countdown-component-unit">S</div>
             </div>
         </div>
+        <canvas id="game"></canvas>
     </main>
     <footer>
         <div class="info-typography date">April 18–19, 2024</div>
