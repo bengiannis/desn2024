@@ -17,6 +17,7 @@ export default class Ground {
 
   update(gameSpeed, frameTimeDelta) {
     this.x -= gameSpeed * frameTimeDelta * this.speed * this.scaleRatio;
+    xOffset += (gameSpeed * frameTimeDelta * this.speed * this.scaleRatio) * 0.05;
   }
 
   draw() {

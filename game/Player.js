@@ -7,9 +7,9 @@ export default class Player {
   jumpInProgress = false;
   falling = false;
   JUMP_SPEED = 0.7;
-  GRAVITY = 0.4;
+  GRAVITY = 0.003;
 
-  JUMP_ACCELERATION = 0.05; // New acceleration constant
+  JUMP_ACCELERATION = 1; // New acceleration constant
   currentAcceleration = 0; // Current acceleration
 
   constructor(ctx, width, height, minJumpHeight, maxJumpHeight, scaleRatio) {
@@ -110,17 +110,38 @@ export default class Player {
   //   }
   // }
 
+  // jump(frameTimeDelta) {
+  //   if (this.jumpPressed && !this.jumpInProgress) {
+  //     this.jumpInProgress = true;
+  //     this.currentAcceleration = -this.JUMP_SPEED; // Start with upward acceleration
+  //   }
+
+  //   if (this.jumpInProgress) {
+  //     this.y += this.currentAcceleration * frameTimeDelta * this.scaleRatio;
+  //     this.currentAcceleration += this.JUMP_ACCELERATION; // Gravity effect
+
+  //     if (this.y >= this.yStandingPosition) { // Check if player is back on the ground
+  //       this.y = this.yStandingPosition; // Reset to standing position
+  //       this.jumpInProgress = false;
+  //       this.falling = false;
+  //       this.currentAcceleration = 0; // Reset acceleration
+  //     }
+  //   }
+  // }
+
   jump(frameTimeDelta) {
     if (this.jumpPressed && !this.jumpInProgress) {
       this.jumpInProgress = true;
-      this.currentAcceleration = -this.JUMP_SPEED; // Start with upward acceleration
+      this.currentAcceleration = -this.JUMP_SPEED;
     }
-
+  
     if (this.jumpInProgress) {
+      // Update position and acceleration
       this.y += this.currentAcceleration * frameTimeDelta * this.scaleRatio;
-      this.currentAcceleration += this.JUMP_ACCELERATION; // Gravity effect
-
-      if (this.y >= this.yStandingPosition) { // Check if player is back on the ground
+      this.currentAcceleration += this.GRAVITY * frameTimeDelta; // Apply gravity
+  
+      // Check if player is back on the ground
+      if (this.y >= this.yStandingPosition) {
         this.y = this.yStandingPosition; // Reset to standing position
         this.jumpInProgress = false;
         this.falling = false;
@@ -128,6 +149,8 @@ export default class Player {
       }
     }
   }
+  
+  
 
   run(gameSpeed, frameTimeDelta) {
     if (this.walkAnimationTimer <= 0) {
