@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>p5.js Fullscreen with SVG and Physics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+
+<div id="canvasContainer"></div> <!-- Container for the p5.js canvas -->
+
+<script>
+  let offScreenGraphics;
+  let svg;
+  let particles = [];
+  const particleCount = 10000;
+  const initialVelocity = 10; // Initial velocity distance
+  const initialPositionOffset = 200; // Initial position distance
+  let svgWidth, svgHeight;
+  const maxDimension = 800; // Maximum dimension for SVG
+
+  function preload() {
+    svg = loadImage('hero.svg', img => {
+      // Calculate aspect ratio and set dimensions
+      const aspectRatio = img.width / img.height;
+      if (img.width > img.height) {
+        svgWidth = maxDimension;
+        svgHeight = maxDimension / aspectRatio;
+      } else {
+        svgWidth = maxDimension * aspectRatio;
+        svgHeight = maxDimension;
+      }
+    });
+  }
+
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    noSmooth();
+    offScreenGraphics = createGraphics(svgWidth, svgHeight);
+    offScreenGraphics.image(svg, 0, 0, svgWidth, svgHeight);
+    background('#090F17');
+    
+    // Initialize particles
+    let hits = 0;
+    const svgX = (width - svgWidth) / 2;
+    const svgY = (height - svgHeight) / 2;
+
+    while (hits < particleCount) {
+      const x = Math.floor(random(svgX, svgX + svgWidth));
+      const y = Math.floor(random(svgY, svgY + svgHeight));
+
+      if (isInsideSVG(x, y)) {
+        particles.push(new Particle(x, y));
+        hits++;
+      }
+    }
+  }
+
+  function draw() {
+    background('#090F17');
+    for (let p of particles) {
+      p.update();
+      p.display();
+    }
+  }
+
+  function isInsideSVG(x, y) {
+    const translatedX = x - (width - svgWidth) / 2;
+    const translatedY = y - (height - svgHeight) / 2;
+
+    if (translatedX < 0 || translatedY < 0 || translatedX >= svgWidth || translatedY >= svgHeight) {
+      return false;
+    }
+
+    const pixel = offScreenGraphics.get(translatedX, translatedY);
+    return alpha(pixel) > 0;
+  }
+
+  class Particle {
+    constructor(x, y) {
+      this.anchor = createVector(x, y);
+      // Offset initial position
+      const offset = p5.Vector.random2D().mult(random(initialPositionOffset));
+      this.pos = p5.Vector.add(this.anchor, offset);
+      this.vel = p5.Vector.random2D().mult(random(initialVelocity));
+      this.forceStrength = random(0.0003, 0.0008); // Random force strength
+      this.damping = random(0.96, 1); // Random damping factor
+    }
+
+    update() {
+      let force = p5.Vector.sub(this.anchor, this.pos).mult(this.forceStrength);
+      this.vel.add(force); // Apply force
+      this.vel.mult(this.damping); // Apply damping
+      this.pos.add(this.vel);
+  // Snap to nearest 2px grid
+//   this.pos.x = Math.round(this.pos.x / 1) * 1;
+//   this.pos.y = Math.round(this.pos.y / 1) * 1;
+    }
+
+    display() {
+      fill('#F3F4FA');
+      noStroke();
+      rect(this.pos.x, this.pos.y, 1, 1);
+    }
+  }
+
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+  }
+</script>
+
+</body>
+</html>

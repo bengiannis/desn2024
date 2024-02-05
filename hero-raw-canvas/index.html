@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+
+<script>
+  const canvas = document.getElementById('myCanvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  // Disable antialiasing
+  ctx.imageSmoothingEnabled = false;
+
+  // Create an off-screen canvas for SVG
+  const offScreenCanvas = document.createElement('canvas');
+  offScreenCanvas.width = 200;
+  offScreenCanvas.height = 200;
+  const offCtx = offScreenCanvas.getContext('2d');
+
+  // Set the main canvas background color
+  ctx.fillStyle = '#090F17';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Load the SVG into the off-screen canvas
+  const img = new Image();
+  img.onload = function() {
+    offCtx.drawImage(img, 0, 0, 200, 200);
+    drawParticles();
+  }
+  img.src = 'hero.svg'; // Replace with your SVG file path
+
+  function isInsideSVG(x, y) {
+    const translatedX = x - (canvas.width - offScreenCanvas.width) / 2;
+    const translatedY = y - (canvas.height - offScreenCanvas.height) / 2;
+
+    if (translatedX < 0 || translatedY < 0 || translatedX >= 200 || translatedY >= 200) {
+      return false;
+    }
+
+    const pixel = offCtx.getImageData(translatedX, translatedY, 1, 1).data;
+    return pixel[3] > 0;
+  }
+
+  function drawParticles() {
+    let hits = 0;
+    while (hits < 1000) {
+      const x = Math.floor(Math.random() * canvas.width);
+      const y = Math.floor(Math.random() * canvas.height);
+
+      if (isInsideSVG(x, y)) {
+        ctx.fillStyle = '#F3F4FA';
+        ctx.fillRect(x, y, 2, 2);
+        hits++;
+      }
+    }
+  }
+</script>
+</body>
+</html>
