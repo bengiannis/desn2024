@@ -3,5 +3,11 @@ export default async (req, context) => {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  return new Response("Hello, world!", { status: 200 });
+  const data = await req.json(); // Parse the JSON body
+  return new Response(JSON.stringify(data), { 
+    status: 200,
+    headers: {
+      "Content-Type": "application/json" // Set the Content-Type header
+    }
+  });
 };
