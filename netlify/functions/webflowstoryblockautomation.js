@@ -1,7 +1,5 @@
-import fetch from 'node-fetch'; // Import fetch if it's not natively available
-
+// Assuming 'fetch' is available in the global scope
 export default async (req, context) => {
-  // Only proceed for POST requests
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
@@ -30,10 +28,11 @@ export default async (req, context) => {
     });
 
     if (!response.ok) {
+      // If the server response wasn't ok, throw an error
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = await response.json(); // Parse the JSON from the response
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
@@ -41,6 +40,7 @@ export default async (req, context) => {
       },
     });
   } catch (error) {
+    // Catch and respond with errors if the fetch fails
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: {
