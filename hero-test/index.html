@@ -16,7 +16,7 @@
   let offScreenGraphics;
   let svg;
   let particles = [];
-  const particleCount = 10000;
+  const particleCount = 5000;
   const initialVelocity = 10; // Initial velocity distance
   const initialPositionOffset = 200; // Initial position distance
   let svgWidth, svgHeight;
@@ -81,31 +81,45 @@
 
   class Particle {
     constructor(x, y) {
-      this.anchor = createVector(x, y);
-      // Offset initial position
-      const offset = p5.Vector.random2D().mult(random(initialPositionOffset));
-      this.pos = p5.Vector.add(this.anchor, offset);
-      this.vel = p5.Vector.random2D().mult(random(initialVelocity));
-      this.forceStrength = random(0.0003, 0.0008); // Random force strength
-      this.damping = random(0.96, 1); // Random damping factor
+    this.anchor = createVector(x, y);
+    // Determine axis of movement
+    this.axis = "x"//random(['x', 'y']);
+
+    // Set offset and initial velocity based on axis
+    if (this.axis == 'x') {
+      const offsetX = random(-initialPositionOffset, initialPositionOffset);
+      this.pos = createVector(this.anchor.x + offsetX, this.anchor.y);
+      this.vel = createVector(random([-1, 1]), 0).mult(random(initialVelocity));
+    } else {
+      const offsetY = random(-initialPositionOffset, initialPositionOffset);
+      this.pos = createVector(this.anchor.x, this.anchor.y + offsetY);
+      this.vel = createVector(0, random([-1, 1])).mult(random(initialVelocity));
     }
 
-    update() {
-      let force = p5.Vector.sub(this.anchor, this.pos).mult(this.forceStrength);
-      this.vel.add(force); // Apply force
-      this.vel.mult(this.damping); // Apply damping
-      this.pos.add(this.vel);
-  // Snap to nearest 2px grid
-//   this.pos.x = Math.round(this.pos.x / 1) * 1;
-//   this.pos.y = Math.round(this.pos.y / 1) * 1;
-    }
-
-    display() {
-      fill('#F3F4FA');
-      noStroke();
-      rect(this.pos.x, this.pos.y, 1, 1);
-    }
+    this.forceStrength = random(0.0003, 0.0008); // Random force strength
+    this.damping = random(0.96, 1); // Random damping factor
   }
+
+  update() {
+    let force = p5.Vector.sub(this.anchor, this.pos).mult(this.forceStrength);
+    // Apply force only along the specified axis
+    if (this.axis === 'x') {
+      force.y = 0;
+    } else {
+      force.x = 0;
+    }
+    this.vel.add(force); // Apply force
+    this.vel.mult(this.damping); // Apply damping
+    this.pos.add(this.vel);
+  }
+
+  display() {
+    fill('#F3F4FA');
+    noStroke();
+    rect(this.pos.x, this.pos.y, 2, 2);
+  }
+}
+
 
   function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
