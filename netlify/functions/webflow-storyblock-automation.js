@@ -1,37 +1,47 @@
 export default async (req, context) => {
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
-  }
-
-  const url = 'https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items';
   const apiKey = process.env.Webflow_API_Key;
   const headers = {
     'Accept': 'application/json',
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
   };
-  const body = JSON.stringify({
-    "isArchived": false,
-    "isDraft": false,
-    "fieldData": {
-      "name": "Cadence Festival",
-      "slug": "cadence-festival"
-    }
-  });
 
   try {
-    const response = await fetch(url, {
+    const createCollectionItem = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
       method: 'POST',
       headers: headers,
-      body: body
+      body: JSON.stringify({
+        "isArchived": false,
+        "isDraft": false,
+        "fieldData": {
+          "name": "Cadence Festival",
+          "slug": "cadence-festival"
+        }
+      })
     });
 
-    if (!response.ok) {
+    if (!createCollectionItem.ok) {
       // If the server response wasn't ok, throw an error
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${createCollectionItem.status}`);
     }
 
-    const data = await response.json(); // Parse the JSON from the response
+    const publishSite = await fetch("https://api.webflow.com/v2/sites/65a2feccc5f42eb050926cbe/publish", {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        "publishToWebflowSubdomain": true,
+        "customDomains": [
+          "65c78a39fb54fe2ecb441db6"
+        ]
+      })
+    });
+
+    if (!publishSite.ok) {
+      // If the server response wasn't ok, throw an error
+      throw new Error(`HTTP error! status: ${publishSite.status}`);
+    }
+
+    const data = await publishSite.json(); // Parse the JSON from the response
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
