@@ -1,4 +1,3 @@
-// Assuming 'fetch' is available in the global scope
 export default async (req, context) => {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
