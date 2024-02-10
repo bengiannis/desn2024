@@ -3,7 +3,7 @@ export default async (req, context) => {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  const url = 'https://api.webflow.com/v2/collections/projects/items';
+  const url = 'https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items';
   const apiKey = process.env.Webflow_API_Key;
   const headers = {
     'Accept': 'application/json',
