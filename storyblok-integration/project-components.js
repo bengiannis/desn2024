@@ -55,7 +55,7 @@ const components = {
 const storyblokInstance = new window.StoryblokBridge();
 storyblokInstance.on(['published', 'change'], () => location.reload(true));
 
-const rootElement = document.querySelector("main");
+const rootElement = document.getElementById("project-components");
 
 async function fetchDataAndRender(version) {
     const editing = await isInEditor();
@@ -64,7 +64,9 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
-            rootElement.appendChild(components[content.component].generate(content));
+            if (components.hasOwnProperty(content.component)) {
+                rootElement.appendChild(components[content.component].generate(content));
+            }
         });
     })
     .catch(error => console.error("Error fetching data:", error));
