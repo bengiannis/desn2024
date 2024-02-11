@@ -59,8 +59,8 @@ const rootElement = document.getElementById("project-components");
 
 async function fetchDataAndRender(version) {
     const editing = await isInEditor();
-
-    fetch(`https://api-us.storyblok.com/v2/cdn/stories/storyblok-demo?token=Fm5wlsy8rzc1dPxqi1rs9gtt&version=${editing ? "draft" : "published"}`)
+    
+    fetch(`https://api-us.storyblok.com/v2/cdn/stories/project/${window.location.pathname.split('/').filter(Boolean).pop()}?token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`)
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
