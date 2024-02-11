@@ -8,6 +8,23 @@ export default async (req, context) => {
 
   try {
     const body = await req.json();
+    
+    //`The user desn2024@gmail.com published the Story Oktober Fest (projects/oktober-fest)\nhttps://app.storyblok.com/#/me/spaces/1017572/stories/0/0/3325290`;
+
+    // Regular expression to extract title, type, and slug
+    const regex = /published the Story (.+) \(([^/]+)\/([^)]+)\)/;
+    const matches = body.text.match(regex);
+
+    if (!matches) {
+      throw new Error(`No post info found`);
+    }
+
+    const storyTitle = matches[1]; // "Oktober Fest"
+    const storyType = matches[2]; // "projects"
+    const storySlug = matches[3]; // "oktober-fest"
+
+    console.log(`Title: ${storyTitle}, Type: ${storyType}, Slug: ${storySlug}`);
+
 
     const createCollectionItem = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
       method: 'POST',
@@ -16,8 +33,8 @@ export default async (req, context) => {
         "isArchived": false,
         "isDraft": false,
         "fieldData": {
-          "name": "the name is this",//body.text,
-          "slug": "cadence-festival"
+          "name": `Title: ${storyTitle}, Type: ${storyType}, Slug: ${storySlug}`,
+          "slug": storySlug
         }
       })
     });
