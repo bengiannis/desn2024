@@ -16,7 +16,7 @@ export default async (req, context) => {
         "isArchived": false,
         "isDraft": false,
         "fieldData": {
-          "name": JSON.stringify(body),
+          "name": body.text,
           "slug": "cadence-festival"
         }
       })
