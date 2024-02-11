@@ -20,11 +20,14 @@ export default async (req, context) => {
     }
 
     const storyTitle = matches[1]; // "Oktober Fest"
-    const storyType = matches[2]; // "projects"
+    const storyCollection = matches[2]; // "projects"
     const storySlug = matches[3]; // "oktober-fest"
 
-    console.log(`Title: ${storyTitle}, Type: ${storyType}, Slug: ${storySlug}`);
+    console.log(`Title: ${storyTitle}, Type: ${storyCollection}, Slug: ${storySlug}`);
 
+    if (storyCollection != "projects") {
+      throw new Error(`Not a project`);
+    }
 
     const createCollectionItem = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
       method: 'POST',
@@ -33,7 +36,7 @@ export default async (req, context) => {
         "isArchived": false,
         "isDraft": false,
         "fieldData": {
-          "name": `Title: ${storyTitle}, Type: ${storyType}, Slug: ${storySlug}`,
+          "name": storyTitle,
           "slug": storySlug
         }
       })
