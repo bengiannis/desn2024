@@ -1,14 +1,15 @@
 /* ~~~~~~~~~~ Components ~~~~~~~~~~ */
 
-class ImageLeftTextRight {
+class imageAndText {
     static generate(content) {
-        const { image, caption, subheading, body } = content;
+        const { imageAlignment, image, caption, subheading, body } = content;
 
-        const imageLeftTextRightComponent = document.createElement('div');
-        imageLeftTextRightComponent.className = 'project-component';
+        const imageAndTextComponent = document.createElement('div');
+        imageAndTextComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-        gridContainer.className = 'image-left-text-right-grid';
+        
+        gridContainer.className = (imageAlignment == "right") ? "image-left-text-right-grid" : "text-left-image-right-grid";
 
         const imageColumn = document.createElement('div');
         imageColumn.className = 'project-component-image-area';
@@ -75,14 +76,14 @@ class ImageLeftTextRight {
 
         gridContainer.appendChild(textColumn);
 
-        imageLeftTextRightComponent.appendChild(gridContainer);
+        imageAndTextComponent.appendChild(gridContainer);
 
-        return imageLeftTextRightComponent;
+        return imageAndTextComponent;
     }
 }
 
 const components = {
-    "imageLeftTextRight": ImageLeftTextRight
+    "imageAndText": imageAndText
     // Add more components here
 };
 
