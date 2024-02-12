@@ -4,6 +4,8 @@ class ImageLeftTextRight {
     static generate(content) {
         const { Text } = content;
 
+        console.log("inside");
+
         const imageLeftTextRightComponent = document.createElement('div');
         imageLeftTextRightComponent.className = 'project-component';
 
@@ -11,7 +13,7 @@ class ImageLeftTextRight {
         gridContainer.className = 'image-left-text-right-grid';
 
         const imageColumn = document.createElement('div');
-        imageColumn.className = 'project-component-image-column';
+        imageColumn.className = 'project-component-image-area';
         const img = document.createElement('img');
         img.src = 'https://source.unsplash.com/random';
         img.loading = 'lazy';
@@ -24,7 +26,7 @@ class ImageLeftTextRight {
         captionDiv.textContent = 'Optional Caption';
 
         const textColumn = document.createElement('div');
-        textColumn.className = 'project-component-text-column';
+        textColumn.className = 'project-component-text-area';
 
         const heading = document.createElement('h4');
         heading.textContent = 'Heading';
@@ -40,6 +42,8 @@ class ImageLeftTextRight {
         gridContainer.appendChild(textColumn);
 
         imageLeftTextRightComponent.appendChild(gridContainer);
+
+        console.log(imageLeftTextRightComponent);
 
         return imageLeftTextRightComponent;
     }
@@ -64,8 +68,11 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
+            console.log(content);
             if (components.hasOwnProperty(content.component)) {
+                console.log("starting");
                 rootElement.appendChild(components[content.component].generate(content));
+                console.log("ended");
             }
         });
     })
@@ -73,6 +80,10 @@ async function fetchDataAndRender(version) {
 };
 
 async function isInEditor() {
+    if (!storyblokInstance) {
+        return false;
+    }
+
     return new Promise((resolve) => {
         storyblokInstance.pingEditor(() => {
             resolve(storyblokInstance.isInEditor());
