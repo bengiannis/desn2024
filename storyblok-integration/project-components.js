@@ -8,8 +8,8 @@ class imageAndText {
         imageAndTextComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-        
-        gridContainer.className = (imageAlignment == "right") ? "image-left-text-right-grid" : "text-left-image-right-grid";
+
+        gridContainer.className = (imageAlignment == "right") ? "text-left-image-right-grid" : "image-left-text-right-grid";
 
         const imageColumn = document.createElement('div');
         imageColumn.className = 'project-component-image-area';
