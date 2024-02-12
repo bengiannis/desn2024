@@ -41,6 +41,10 @@ class ImageLeftTextRight {
             body.content.forEach(bodyItem => {
                 const paragraph = document.createElement('p');
                 paragraph.className = 'project-component-paragraph';
+
+                if (!bodyItem.content) {
+                    return;
+                }
     
                 bodyItem.content.forEach(richTextItem => {
                     let text = richTextItem.text;
