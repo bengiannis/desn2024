@@ -32,29 +32,36 @@ class ImageLeftTextRight {
             textColumn.appendChild(subheadingElement);
         }
 
-        body.content.forEach(bodyItem => {
+        if (typeof body == 'string') {
             const paragraph = document.createElement('p');
             paragraph.className = 'project-component-paragraph';
-
-            bodyItem.content.forEach(richTextItem => {
-                let text = richTextItem.text;
-                
-                if (richTextItem.marks) {
-                    richTextItem.marks.forEach(mark => {
-                        if (mark.type === 'link') {
-                            text = `<a href="${mark.attrs.href}" target="_blank">${text}</a>`;
-                        }
-                        else if (mark.type === 'italic') {
-                            text = `<i>${text}</i>`;
-                        }
-                    });
-                }
-                
-                paragraph.innerHTML += text;
+            paragraph.innerText = body;
+        }
+        else {
+            body.content.forEach(bodyItem => {
+                const paragraph = document.createElement('p');
+                paragraph.className = 'project-component-paragraph';
+    
+                bodyItem.content.forEach(richTextItem => {
+                    let text = richTextItem.text;
+                    
+                    if (richTextItem.marks) {
+                        richTextItem.marks.forEach(mark => {
+                            if (mark.type === 'link') {
+                                text = `<a href="${mark.attrs.href}" target="_blank">${text}</a>`;
+                            }
+                            else if (mark.type === 'italic') {
+                                text = `<i>${text}</i>`;
+                            }
+                        });
+                    }
+                    
+                    paragraph.innerHTML += text;
+                });
+    
+                textColumn.appendChild(paragraph);
             });
-
-            textColumn.appendChild(paragraph);
-        });
+        }
 
         gridContainer.appendChild(imageColumn);
 
@@ -89,7 +96,6 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
-            console.log(content);
             if (components.hasOwnProperty(content.component)) {
                 rootElement.appendChild(components[content.component].generate(content));
             }
