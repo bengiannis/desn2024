@@ -22,6 +22,16 @@ export default async (req, context) => {
     return;
   }
 
+  const fetchExistingCollectionItems = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
+    method: 'GET',
+    headers: headers
+  });
+  const existingCollectionItems = await fetchExistingCollectionItems.json();
+
+  if (existingCollectionItems.items.some(item => item.fieldData.slug == storySlug)) {
+    return;
+  }
+
   const createCollectionItem = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
     method: 'POST',
     headers: headers,
