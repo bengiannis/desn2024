@@ -53,16 +53,15 @@ class ImageLeftTextRight {
                 paragraph.innerHTML += text;
             });
 
+            textColumn.appendChild(paragraph);
         });
-
-        textColumn.appendChild(paragraph);
 
         gridContainer.appendChild(imageColumn);
 
         if (caption) {
             gridContainer.appendChild(captionDiv);
         }
-        
+
         gridContainer.appendChild(textColumn);
 
         imageLeftTextRightComponent.appendChild(gridContainer);
