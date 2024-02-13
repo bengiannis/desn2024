@@ -4,6 +4,8 @@ class FullWidthImage {
     static generate(content) {
         const { image, caption } = content;
 
+        console.log("starting FW");
+
         const fullWidthImageComponent = document.createElement('div');
         fullWidthImageComponent.className = 'project-component';
 
@@ -31,6 +33,8 @@ class FullWidthImage {
         }
 
         fullWidthImageComponent.appendChild(gridContainer);
+
+        console.log("ending FW:", fullWidthImageComponent);
 
         return fullWidthImageComponent;
     }
