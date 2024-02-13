@@ -175,7 +175,7 @@ class ImageAndText {
 
 
 const components = {
-    "full-width-image": FullWidthImage,
+    "image-full-width": FullWidthImage,
     "two_images": TwoImages,
     "image_and_text": ImageAndText
     // Add more components here
