@@ -95,6 +95,7 @@ class TwoImages {
 
         const image1Column = document.createElement('div');
         image1Column.className = 'project-component-image-area';
+        image1Column.classList.add("project-component-image-area", "left");
         const img1 = document.createElement('img');
         img1.src = image1.filename;
         img1.loading = 'lazy';
@@ -103,12 +104,12 @@ class TwoImages {
         image1Column.appendChild(img1);
 
         const caption1Div = document.createElement('div');
-        caption1Div.className = 'caption';
+        caption1Div.classList.add("caption", "left");
         caption1Div.textContent = caption1;
 
 
         const image2Column = document.createElement('div');
-        image2Column.className = 'project-component-image-area';
+        image2Column.classList.add("project-component-image-area", "right");
         const img2 = document.createElement('img');
         img2.src = image1.filename;
         img2.loading = 'lazy';
@@ -117,7 +118,7 @@ class TwoImages {
         image2Column.appendChild(img2);
 
         const caption2Div = document.createElement('div');
-        caption2Div.className = 'caption';
+        caption2Div.classList.add("caption", "right");
         caption2Div.textContent = caption2;
 
         gridContainer.appendChild(image1Column);
