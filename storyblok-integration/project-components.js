@@ -4,37 +4,33 @@ class FullWidthImage {
     static generate(content) {
         const { image, caption } = content;
 
-        console.log("starting FW");
-
         const fullWidthImageComponent = document.createElement('div');
         fullWidthImageComponent.className = 'project-component';
 
-        // const gridContainer = document.createElement('div');
+        const gridContainer = document.createElement('div');
 
-        // gridContainer.className = "full-width-image-grid";
+        gridContainer.className = "full-width-image-grid";
 
-        // const imageColumn = document.createElement('div');
-        // imageColumn.className = "project-component-image-area";
-        // const img = document.createElement('img');
-        // img.src = image.filename;
-        // img.loading = 'lazy';
-        // img.alt = image.alt;
-        // img.className = 'project-component-image';
-        // imageColumn.appendChild(img);
+        const imageColumn = document.createElement('div');
+        imageColumn.className = "project-component-image-area";
+        const img = document.createElement('img');
+        img.src = image.filename;
+        img.loading = 'lazy';
+        img.alt = image.alt;
+        img.className = 'project-component-image';
+        imageColumn.appendChild(img);
 
-        // const captionDiv = document.createElement('div');
-        // captionDiv.className = "caption";
-        // captionDiv.textContent = caption;
+        const captionDiv = document.createElement('div');
+        captionDiv.className = "caption";
+        captionDiv.textContent = caption;
 
-        // gridContainer.appendChild(imageColumn);
+        gridContainer.appendChild(imageColumn);
 
-        // if (caption) {
-        //     gridContainer.appendChild(captionDiv);
-        // }
+        if (caption) {
+            gridContainer.appendChild(captionDiv);
+        }
 
-        // fullWidthImageComponent.appendChild(gridContainer);
-
-        // console.log("ending FW:", fullWidthImageComponent);
+        fullWidthImageComponent.appendChild(gridContainer);
 
         return fullWidthImageComponent;
     }
