@@ -1,6 +1,6 @@
 /* ~~~~~~~~~~ Components ~~~~~~~~~~ */
 
-class imageAndText {
+class ImageAndText {
     static generate(content) {
         const { imageAlignment, image, caption, subheading, body } = content;
 
@@ -82,8 +82,65 @@ class imageAndText {
     }
 }
 
+class TwoImages {
+    static generate(content) {
+        const { image1, image2, caption1, caption2 } = content;
+
+        const twoImagesComponent = document.createElement('div');
+        twoImagesComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+
+        gridContainer.className = "image-left-image-right-grid";
+
+        const image1Column = document.createElement('div');
+        image1Column.className = 'project-component-image-area';
+        const img1 = document.createElement('img');
+        img1.src = image1.filename;
+        img1.loading = 'lazy';
+        img1.alt = image1.alt;
+        img1.className = 'project-component-image';
+        image1Column.appendChild(img1);
+
+        const caption1Div = document.createElement('div');
+        caption1Div.className = 'caption';
+        caption1Div.textContent = caption1;
+
+
+        const image2Column = document.createElement('div');
+        image2Column.className = 'project-component-image-area';
+        const img2 = document.createElement('img');
+        img2.src = image1.filename;
+        img2.loading = 'lazy';
+        img2.alt = image1.alt;
+        img2.className = 'project-component-image';
+        image2Column.appendChild(img2);
+
+        const caption2Div = document.createElement('div');
+        caption2Div.className = 'caption';
+        caption2Div.textContent = caption2;
+
+        gridContainer.appendChild(image1Column);
+
+        if (caption1) {
+            gridContainer.appendChild(caption1Div);
+        }
+
+        gridContainer.appendChild(image2Column);
+
+        if (caption2) {
+            gridContainer.appendChild(caption2Div);
+        }
+
+        twoImagesComponent.appendChild(gridContainer);
+
+        return twoImagesComponent;
+    }
+}
+
 const components = {
-    "imageAndText": imageAndText
+    "image_and_text": ImageAndText,
+    "two_images": TwoImages,
     // Add more components here
 };
 
