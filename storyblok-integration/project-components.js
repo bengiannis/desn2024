@@ -104,9 +104,8 @@ class TwoImages {
         image1Column.appendChild(img1);
 
         const caption1Div = document.createElement('div');
-        caption1Div.classList.add("caption", "left");
+        caption1Div.classList.add("caption", "in-large-grid", "left");
         caption1Div.textContent = caption1;
-
 
         const image2Column = document.createElement('div');
         image2Column.classList.add("project-component-image-area", "right");
@@ -118,7 +117,7 @@ class TwoImages {
         image2Column.appendChild(img2);
 
         const caption2Div = document.createElement('div');
-        caption2Div.classList.add("caption", "right");
+        caption2Div.classList.add("caption", "in-large-grid", "right");
         caption2Div.textContent = caption2;
 
         gridContainer.appendChild(image1Column);
