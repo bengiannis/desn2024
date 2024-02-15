@@ -209,6 +209,109 @@ class WideImage {
     }
 }
 
+class LargeHeading {
+    static generate(content) {
+        const { alignment, text } = content;
+
+        const largeHeadingComponent = document.createElement('div');
+        largeHeadingComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+
+        gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
+
+        const textColumn = document.createElement('div');
+        textColumn.className = 'project-component-text-area';
+
+        const headingElement = document.createElement('h3');
+        headingElement.textContent = text;
+        textColumn.appendChild(headingElement);
+
+        largeHeadingComponent.appendChild(gridContainer);
+
+        return largeHeadingComponent;
+    }
+}
+
+class SmallHeading {
+    static generate(content) {
+        const { alignment, text } = content;
+
+        const largeHeadingComponent = document.createElement('div');
+        largeHeadingComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+
+        gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
+
+        const textColumn = document.createElement('div');
+        textColumn.className = 'project-component-text-area';
+
+        const subheadingElement = document.createElement('h4');
+        subheadingElement.textContent = text;
+        textColumn.appendChild(subheadingElement);
+
+        largeHeadingComponent.appendChild(gridContainer);
+
+        return largeHeadingComponent;
+    }
+}
+
+class Paragraph {
+    static generate(content) {
+        const { alignment, text } = content;
+
+        const largeHeadingComponent = document.createElement('div');
+        largeHeadingComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+
+        gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
+
+        const textColumn = document.createElement('div');
+        textColumn.className = 'project-component-text-area';
+
+        if (typeof body == 'string') {
+            const paragraph = document.createElement('p');
+            paragraph.className = 'project-component-paragraph';
+            paragraph.innerText = body;
+        }
+        else {
+            text.content.forEach(bodyItem => {
+                const paragraph = document.createElement('p');
+                paragraph.className = 'project-component-paragraph';
+
+                if (!bodyItem.content) {
+                    return;
+                }
+    
+                bodyItem.content.forEach(richTextItem => {
+                    let textContent = richTextItem.text;
+                    
+                    if (richTextItem.marks) {
+                        richTextItem.marks.forEach(mark => {
+                            if (mark.type === 'link') {
+                                textContent = `<a href="${mark.attrs.href}" target="_blank">${textContent}</a>`;
+                            }
+                            else if (mark.type === 'italic') {
+                                textContent = `<i>${textContent}</i>`;
+                            }
+                        });
+                    }
+                    
+                    paragraph.innerHTML += textContent;
+                });
+    
+                textColumn.appendChild(paragraph);
+            });
+        }
+
+        largeHeadingComponent.appendChild(gridContainer);
+
+        return largeHeadingComponent;
+    }
+}
+
 
 const components = {
     "image_full_width": FullWidthImage,
