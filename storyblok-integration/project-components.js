@@ -128,6 +128,8 @@ class ImageAndText {
             const paragraph = document.createElement('p');
             paragraph.className = 'project-component-paragraph';
             paragraph.innerText = body;
+            
+            textColumn.appendChild(paragraph);
         }
         else {
             body.content.forEach(bodyItem => {
@@ -261,8 +263,8 @@ class Paragraph {
     static generate(content) {
         const { alignment, text } = content;
 
-        const largeHeadingComponent = document.createElement('div');
-        largeHeadingComponent.className = 'project-component';
+        const paragraphComponent = document.createElement('div');
+        paragraphComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
 
@@ -275,6 +277,8 @@ class Paragraph {
             const paragraph = document.createElement('p');
             paragraph.className = 'project-component-paragraph';
             paragraph.innerText = body;
+            
+            textColumn.appendChild(paragraph);
         }
         else {
             text.content.forEach(bodyItem => {
@@ -306,9 +310,9 @@ class Paragraph {
             });
         }
 
-        largeHeadingComponent.appendChild(gridContainer);
+        paragraphComponent.appendChild(gridContainer);
 
-        return largeHeadingComponent;
+        return paragraphComponent;
     }
 }
 
