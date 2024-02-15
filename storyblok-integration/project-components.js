@@ -219,17 +219,16 @@ class RegularHeading {
         regularHeadingComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-
         gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
+        regularHeadingComponent.appendChild(gridContainer);
 
         const textColumn = document.createElement('div');
         textColumn.className = 'project-component-text-area';
+        gridContainer.appendChild(textColumn);
 
         const headingElement = document.createElement('h3');
         headingElement.textContent = text;
         textColumn.appendChild(headingElement);
-
-        regularHeadingComponent.appendChild(gridContainer);
 
         return regularHeadingComponent;
     }
@@ -243,17 +242,17 @@ class SmallHeading {
         largeHeadingComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
+        largeHeadingComponent.appendChild(gridContainer);
 
         gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
 
         const textColumn = document.createElement('div');
         textColumn.className = 'project-component-text-area';
+        gridContainer.appendChild(textColumn);
 
         const subheadingElement = document.createElement('h4');
         subheadingElement.textContent = text;
         textColumn.appendChild(subheadingElement);
-
-        largeHeadingComponent.appendChild(gridContainer);
 
         return largeHeadingComponent;
     }
@@ -267,16 +266,17 @@ class Paragraph {
         paragraphComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-
         gridContainer.className = (alignment == "right") ? "text-right-grid" : (alignment == "center") ? "text-center-grid" : "text-left-grid";
+        paragraphComponent.appendChild(gridContainer);
 
         const textColumn = document.createElement('div');
         textColumn.className = 'project-component-text-area';
+        gridContainer.appendChild(textColumn);
 
-        if (typeof body == 'string') {
+        if (typeof text == 'string') {
             const paragraph = document.createElement('p');
             paragraph.className = 'project-component-paragraph';
-            paragraph.innerText = body;
+            paragraph.innerText = text;
             
             textColumn.appendChild(paragraph);
         }
@@ -309,8 +309,6 @@ class Paragraph {
                 textColumn.appendChild(paragraph);
             });
         }
-
-        paragraphComponent.appendChild(gridContainer);
 
         return paragraphComponent;
     }
