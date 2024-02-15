@@ -128,7 +128,7 @@ class ImageAndText {
             const paragraph = document.createElement('p');
             paragraph.className = 'project-component-paragraph';
             paragraph.innerText = body;
-            
+
             textColumn.appendChild(paragraph);
         }
         else {
@@ -342,7 +342,10 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
+            console.log("Loading: ", content);
             if (components.hasOwnProperty(content.component)) {
+                console.log("Found: ", components[content.component]);
+                console.log("Added: ", rootElement.children[rootElement.children.length - 1])
                 rootElement.appendChild(components[content.component].generate(content));
             }
         });
