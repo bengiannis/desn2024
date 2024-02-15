@@ -173,11 +173,48 @@ class ImageAndText {
     }
 }
 
+class WideImage {
+    static generate(content) {
+        const { alignment, image, caption } = content;
+
+        const wideImageComponent = document.createElement('div');
+        wideImageComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+
+        gridContainer.className = (alignment == "right") ? "wide-right-image-grid" : "wide-left-image-grid";
+
+        const imageColumn = document.createElement('div');
+        imageColumn.className = "project-component-image-area";
+        const img = document.createElement('img');
+        img.src = image.filename;
+        img.loading = 'lazy';
+        img.alt = image.alt;
+        img.className = 'project-component-image';
+        imageColumn.appendChild(img);
+
+        const captionDiv = document.createElement('div');
+        captionDiv.className = "caption";
+        captionDiv.textContent = caption;
+
+        gridContainer.appendChild(imageColumn);
+
+        if (caption) {
+            gridContainer.appendChild(captionDiv);
+        }
+
+        wideImageComponent.appendChild(gridContainer);
+
+        return wideImageComponent;
+    }
+}
+
 
 const components = {
     "image_full_width": FullWidthImage,
     "two_images": TwoImages,
-    "image_and_text": ImageAndText
+    "image_and_text": ImageAndText,
+    "wide_image": WideImage
     // Add more components here
 };
 

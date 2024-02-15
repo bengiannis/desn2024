@@ -32,7 +32,7 @@ export default async (req, context) => {
     return;
   }
 
-  const createCollectionItem = await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
+  await fetch("https://api.webflow.com/v2/collections/65a3037472b070dda83f4b2d/items", {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
@@ -45,7 +45,7 @@ export default async (req, context) => {
     })
   });
 
-  const publishSite = await fetch("https://api.webflow.com/v2/sites/65a2feccc5f42eb050926cbe/publish", {
+  await fetch("https://api.webflow.com/v2/sites/65a2feccc5f42eb050926cbe/publish", {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
