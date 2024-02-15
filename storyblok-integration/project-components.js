@@ -209,12 +209,12 @@ class WideImage {
     }
 }
 
-class LargeHeading {
+class RegularHeading {
     static generate(content) {
         const { alignment, text } = content;
 
-        const largeHeadingComponent = document.createElement('div');
-        largeHeadingComponent.className = 'project-component';
+        const regularHeadingComponent = document.createElement('div');
+        regularHeadingComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
 
@@ -227,9 +227,9 @@ class LargeHeading {
         headingElement.textContent = text;
         textColumn.appendChild(headingElement);
 
-        largeHeadingComponent.appendChild(gridContainer);
+        regularHeadingComponent.appendChild(gridContainer);
 
-        return largeHeadingComponent;
+        return regularHeadingComponent;
     }
 }
 
@@ -317,7 +317,10 @@ const components = {
     "image_full_width": FullWidthImage,
     "two_images": TwoImages,
     "image_and_text": ImageAndText,
-    "wide_image": WideImage
+    "wide_image": WideImage,
+    "regular_heading": RegularHeading,
+    "small_heading": SmallHeading,
+    "paragraph": Paragraph
     // Add more components here
 };
 
