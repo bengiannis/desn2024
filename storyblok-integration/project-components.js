@@ -314,6 +314,19 @@ class Paragraph {
     }
 }
 
+class Divider {
+    static generate(content) {
+        const dividerComponent = document.createElement('div');
+        dividerComponent.className = 'project-component';
+
+        const dividerLine = document.createElement('div');
+        dividerLine.className = 'divider';
+        dividerComponent.appendChild(dividerLine);
+
+        return dividerComponent;
+    }
+}
+
 
 const components = {
     "image_full_width": FullWidthImage,
@@ -322,7 +335,8 @@ const components = {
     "wide_image": WideImage,
     "regular_heading": RegularHeading,
     "small_heading": SmallHeading,
-    "paragraph": Paragraph
+    "paragraph": Paragraph,
+    "divider": Divider
     // Add more components here
 };
 
