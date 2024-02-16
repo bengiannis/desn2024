@@ -314,7 +314,7 @@ class Paragraph {
     }
 }
 
-class Divider {
+class DividerLine {
     static generate(content) {
         const dividerComponent = document.createElement('div');
         dividerComponent.className = 'project-component';
@@ -336,7 +336,7 @@ const components = {
     "regular_heading": RegularHeading,
     "small_heading": SmallHeading,
     "paragraph": Paragraph,
-    "divider": Divider
+    "divider_line": DividerLine
     // Add more components here
 };
 
@@ -354,10 +354,7 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
         data.story.content.body.forEach(content => {
-            console.log("Loading: ", content);
             if (components.hasOwnProperty(content.component)) {
-                console.log("Found: ", components[content.component]);
-                console.log("Added: ", rootElement.children[rootElement.children.length - 1])
                 rootElement.appendChild(components[content.component].generate(content));
             }
         });
