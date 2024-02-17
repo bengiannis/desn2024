@@ -352,27 +352,38 @@ class ProjectInfo {
         grid.appendChild(projectInfoGridColumn);
 
         // Attributes
-        for (let i = 0; i < attributes.length; i++) {
-            const attr = attributes[i];
+        for (let i = 0; i < 5; i++) {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
             projectInfoGridColumn.appendChild(attributeComponent);
-
-            let attributeHeadingStr = "";
-            let attributeValueStr = "";
-
-            if (i == 0) {
-                
-            }
         
             const attributeHeading = document.createElement('h5');
-            attributeHeading.textContent = attributeHeadingStr;
             attributeComponent.appendChild(attributeHeading);
         
             const attributeValue = document.createElement('div');
             attributeValue.className = 'small-paragraph';
-            attributeValue.textContent = attr.value;
             attributeComponent.appendChild(attributeValue);
+
+            if (i == 0) {
+                attributeHeading.textContent = "Designer";
+                attributeValue.textContent = "Ben";
+            }
+            else if (i == 1) {
+                attributeHeading.textContent = "Created For";
+                attributeValue.textContent = `${createdFor}, ${yearCreated}`;
+            }
+            else if (i == 2) {
+                attributeHeading.textContent = "Tools Used";
+                attributeValue.textContent = tools.join(', ');
+            }
+            else if (i == 3) {
+                attributeHeading.textContent = "Project Length";
+                attributeValue.textContent = projectLength;
+            }
+            else if (i == 4) {
+                attributeHeading.textContent = "Project Link"
+                attributeValue.textContent = projectLink
+            }
         }
 
         // Project Hero
