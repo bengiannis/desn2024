@@ -293,10 +293,16 @@ class DividerLine {
 class ProjectInfo {
     static generate(content) {
         const {
-            title,
-            description,
-            tags,
-            attributes
+            name,
+            projectDescription,
+            creators,
+            designDisciplines,
+            createdFor,
+            yearCreated,
+            tools,
+            projectLength,
+            projectLink,
+            mainImage
         } = content;
 
         const projectInfoContainer = document.createElement('div');
@@ -305,7 +311,7 @@ class ProjectInfo {
         // Project Title
         const projectTitle = document.createElement('h1');
         projectTitle.className = 'project-title';
-        projectTitle.textContent = title;
+        projectTitle.textContent = name;
         projectInfoContainer.appendChild(projectTitle);
 
         // Grid for project description and attributes
@@ -324,7 +330,7 @@ class ProjectInfo {
 
         const descriptionText = document.createElement('p');
         descriptionText.className = 'small-paragraph';
-        descriptionText.textContent = description;
+        descriptionText.textContent = projectDescription;
         descriptionComponent.appendChild(descriptionText);
 
         // Tags
@@ -332,7 +338,7 @@ class ProjectInfo {
         tagsContainer.className = 'specialty-tags-flex-component';
         descriptionComponent.appendChild(tagsContainer);
 
-        tags.forEach(tag => {
+        designDisciplines.forEach(tag => {
             const tagElement = document.createElement('a');
             tagElement.className = 'specialty-tag';
             tagElement.href = '#';
@@ -351,21 +357,34 @@ class ProjectInfo {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
             projectInfoGridColumn.appendChild(attributeComponent);
+
+            let attributeHeadingStr = "";
+            let attributeValueStr = "";
+
+            if (i == 0) {
+                
+            }
         
             const attributeHeading = document.createElement('h5');
-            attributeHeading.textContent = attr.name;
+            attributeHeading.textContent = attributeHeadingStr;
             attributeComponent.appendChild(attributeHeading);
         
             const attributeValue = document.createElement('div');
             attributeValue.className = 'small-paragraph';
             attributeValue.textContent = attr.value;
             attributeComponent.appendChild(attributeValue);
-        }        
+        }
 
-        // Project Hero Container
+        // Project Hero
         const heroContainer = document.createElement('div');
         heroContainer.className = 'project-hero-container';
         grid.appendChild(heroContainer);
+
+        const img = document.createElement('img');
+        img.src = mainImage.filename;
+        img.alt = mainImage.alt;
+        img.className = 'project-component-image';
+        heroContainer.appendChild(img);
 
         return projectInfoContainer;
     }
@@ -393,23 +412,11 @@ async function fetchDataAndRender(version) {
 
     fetch(`https://api-us.storyblok.com/v2/cdn/stories/projects/${window.location.pathname.split('/').filter(Boolean).pop()}?token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`)
     .then(response => response.json())
-    .then(data => {
-
-        const projectInfo = {
-            title: 'Title',
-            description: 'Lorem ipsum dolor sit amet consectetur.',
-            tags: ['Tag'],
-            attributes: [
-                { name: 'Attribute', value: 'Value' },
-                { name: 'Attribute', value: 'Value' },
-                { name: 'Attribute', value: 'Value' },
-                { name: 'Attribute', value: 'Value' },
-                { name: 'Attribute', value: 'Value' },
-                // Add more attributes as needed
-            ]
-        };
-        
-        document.getElementById("project-info-section").appendChild(ProjectInfo.generate(projectInfo));
+    .then(data => {        
+        document.getElementById("project-info-section").appendChild(ProjectInfo.generate({
+            ...data.story.content,
+            name: data.story.name,
+        }));
 
         const rootElement = document.getElementById("project-components");
 
