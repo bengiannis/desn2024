@@ -1,15 +1,14 @@
 /* ~~~~~~~~~~ Components ~~~~~~~~~~ */
 
-class FullWidthImage {
+class SingleImage {
     static generate(content) {
-        const { image, caption } = content;
+        const { alignment, image, caption } = content;
 
-        const fullWidthImageComponent = document.createElement('div');
-        fullWidthImageComponent.className = 'project-component';
+        const singleImageComponent = document.createElement('div');
+        singleImageComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-
-        gridContainer.className = "full-width-image-grid";
+        gridContainer.className = alignment === "full" ? "full-width-image-grid" : (alignment === "right" ? "wide-right-image-grid" : "wide-left-image-grid");
 
         const imageColumn = document.createElement('div');
         imageColumn.className = "project-component-image-area";
@@ -30,9 +29,9 @@ class FullWidthImage {
             gridContainer.appendChild(captionDiv);
         }
 
-        fullWidthImageComponent.appendChild(gridContainer);
+        singleImageComponent.appendChild(gridContainer);
 
-        return fullWidthImageComponent;
+        return singleImageComponent;
     }
 }
 
@@ -175,42 +174,6 @@ class ImageAndText {
     }
 }
 
-class WideImage {
-    static generate(content) {
-        const { alignment, image, caption } = content;
-
-        const wideImageComponent = document.createElement('div');
-        wideImageComponent.className = 'project-component';
-
-        const gridContainer = document.createElement('div');
-
-        gridContainer.className = (alignment == "right") ? "wide-right-image-grid" : "wide-left-image-grid";
-
-        const imageColumn = document.createElement('div');
-        imageColumn.className = "project-component-image-area";
-        const img = document.createElement('img');
-        img.src = image.filename;
-        img.loading = 'lazy';
-        img.alt = image.alt;
-        img.className = 'project-component-image';
-        imageColumn.appendChild(img);
-
-        const captionDiv = document.createElement('div');
-        captionDiv.className = "caption";
-        captionDiv.textContent = caption;
-
-        gridContainer.appendChild(imageColumn);
-
-        if (caption) {
-            gridContainer.appendChild(captionDiv);
-        }
-
-        wideImageComponent.appendChild(gridContainer);
-
-        return wideImageComponent;
-    }
-}
-
 class RegularHeading {
     static generate(content) {
         const { alignment, text } = content;
@@ -329,10 +292,9 @@ class DividerLine {
 
 
 const components = {
-    "image_full_width": FullWidthImage,
+    "single_image": SingleImage,
     "two_images": TwoImages,
     "image_and_text": ImageAndText,
-    "wide_image": WideImage,
     "regular_heading": RegularHeading,
     "small_heading": SmallHeading,
     "paragraph": Paragraph,
@@ -353,6 +315,9 @@ async function fetchDataAndRender(version) {
     fetch(`https://api-us.storyblok.com/v2/cdn/stories/projects/${window.location.pathname.split('/').filter(Boolean).pop()}?token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`)
     .then(response => response.json())
     .then(data => {
+
+
+
         data.story.content.body.forEach(content => {
             if (components.hasOwnProperty(content.component)) {
                 rootElement.appendChild(components[content.component].generate(content));
