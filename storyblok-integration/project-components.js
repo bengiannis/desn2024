@@ -351,8 +351,10 @@ class ProjectInfo {
         projectInfoGridColumn.className = 'project-info-grid-column';
         grid.appendChild(projectInfoGridColumn);
 
+        const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
+        
         // Attributes
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < (projectLinkExists ? 5 : 4); i++) {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
             projectInfoGridColumn.appendChild(attributeComponent);
@@ -372,17 +374,29 @@ class ProjectInfo {
                 attributeHeading.innerHTML = "Created For";
                 attributeValue.innerHTML = `${createdFor}, ${yearCreated}`;
             }
-            else if (i == 2) {
+            else if (i == (projectLinkExists ? 2 : 3)) {
                 attributeHeading.innerHTML = "Tools Used";
                 attributeValue.innerHTML = tools.join(', ');
             }
-            else if (i == 3) {
+            else if (i == (projectLinkExists ? 3 : 4)) {
                 attributeHeading.innerHTML = "Project Length";
                 attributeValue.innerHTML = projectLength;
             }
             else if (i == 4) {
-                attributeHeading.innerHTML = "Project Link"
-                attributeValue.innerHTML = `<a href="${projectLink.linktype == "story" ? "/" : ""}${projectLink["cached_url"]}" target="_blank">Link</a>`;
+                attributeHeading.innerHTML = "Project Link";
+
+                let linkURL = "";
+                let linkText = "";
+                if (projectLink.linktype == "story") {
+                    linkURL = "/" + projectLink["cached_url"];
+                    linkText = "Link";
+                }
+                else {
+                    linkURL = (projectLink["cached_url"].startsWith("http") ? "" : "https://") + projectLink["cached_url"];
+                    linkText = "Link";
+                }
+
+                attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
             }
         }
 
