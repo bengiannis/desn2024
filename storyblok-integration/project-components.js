@@ -340,21 +340,27 @@ class ProjectInfo {
             tagsContainer.appendChild(tagElement);
         });
 
-        // Attributes
-        attributes.forEach(attr => {
-            const attributeComponent = document.createElement('div');
-            attributeComponent.className = 'project-info-component';
-            grid.appendChild(attributeComponent);
+        // Project Description
+        const projectInfoGridColumn = document.createElement('div');
+        projectInfoGridColumn.className = 'project-info-grid-column';
+        grid.appendChild(projectInfoGridColumn);
 
+        // Attributes
+        for (let i = 0; i < attributes.length; i++) {
+            const attr = attributes[i];
+            const attributeComponent = document.createElement('div');
+            attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
+            projectInfoGridColumn.appendChild(attributeComponent);
+        
             const attributeHeading = document.createElement('h5');
             attributeHeading.textContent = attr.name;
             attributeComponent.appendChild(attributeHeading);
-
+        
             const attributeValue = document.createElement('div');
             attributeValue.className = 'small-paragraph';
             attributeValue.textContent = attr.value;
             attributeComponent.appendChild(attributeValue);
-        });
+        }        
 
         // Project Hero Container
         const heroContainer = document.createElement('div');
