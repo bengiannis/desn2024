@@ -389,7 +389,7 @@ class ProjectInfo {
         // Project Hero
         const heroContainer = document.createElement('div');
         heroContainer.className = 'project-hero-container';
-        grid.appendChild(heroContainer);
+        projectInfoContainer.appendChild(heroContainer);
 
         const img = document.createElement('img');
         img.src = mainImage.filename;
