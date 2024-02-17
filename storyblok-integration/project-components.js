@@ -290,6 +290,81 @@ class DividerLine {
     }
 }
 
+class ProjectInfo {
+    static generate(content) {
+        const {
+            title,
+            description,
+            tags,
+            attributes
+        } = content;
+
+        const projectInfoContainer = document.createElement('div');
+        projectInfoContainer.className = 'project-info-container w-container';
+
+        // Project Title
+        const projectTitle = document.createElement('h1');
+        projectTitle.className = 'project-title';
+        projectTitle.textContent = title;
+        projectInfoContainer.appendChild(projectTitle);
+
+        // Grid for project description and attributes
+        const grid = document.createElement('div');
+        grid.className = 'project-info-grid';
+        projectInfoContainer.appendChild(grid);
+
+        // Project Description
+        const descriptionComponent = document.createElement('div');
+        descriptionComponent.className = 'project-description-component';
+        grid.appendChild(descriptionComponent);
+
+        const descriptionHeading = document.createElement('h5');
+        descriptionHeading.textContent = 'Description';
+        descriptionComponent.appendChild(descriptionHeading);
+
+        const descriptionText = document.createElement('p');
+        descriptionText.className = 'small-paragraph';
+        descriptionText.textContent = description;
+        descriptionComponent.appendChild(descriptionText);
+
+        // Tags
+        const tagsContainer = document.createElement('div');
+        tagsContainer.className = 'specialty-tags-flex-component';
+        descriptionComponent.appendChild(tagsContainer);
+
+        tags.forEach(tag => {
+            const tagElement = document.createElement('a');
+            tagElement.className = 'specialty-tag';
+            tagElement.href = '#';
+            tagElement.textContent = tag;
+            tagsContainer.appendChild(tagElement);
+        });
+
+        // Attributes
+        attributes.forEach(attr => {
+            const attributeComponent = document.createElement('div');
+            attributeComponent.className = 'project-info-component';
+            grid.appendChild(attributeComponent);
+
+            const attributeHeading = document.createElement('h5');
+            attributeHeading.textContent = attr.name;
+            attributeComponent.appendChild(attributeHeading);
+
+            const attributeValue = document.createElement('div');
+            attributeValue.className = 'small-paragraph';
+            attributeValue.textContent = attr.value;
+            attributeComponent.appendChild(attributeValue);
+        });
+
+        // Project Hero Container
+        const heroContainer = document.createElement('div');
+        heroContainer.className = 'project-hero-container';
+        grid.appendChild(heroContainer);
+
+        return projectInfoContainer;
+    }
+}
+
 
 const components = {
     "single_image": SingleImage,
@@ -307,8 +382,6 @@ const components = {
 const storyblokInstance = new window.StoryblokBridge();
 storyblokInstance.on(['published', 'change'], () => location.reload(true));
 
-const rootElement = document.getElementById("project-components");
-
 async function fetchDataAndRender(version) {
     const editing = await isInEditor();
 
@@ -316,7 +389,23 @@ async function fetchDataAndRender(version) {
     .then(response => response.json())
     .then(data => {
 
+        const projectInfo = {
+            title: 'Title',
+            description: 'Lorem ipsum dolor sit amet consectetur.',
+            tags: ['Tag'],
+            attributes: [
+                { name: 'Attribute', value: 'Value' },
+                { name: 'Attribute', value: 'Value' },
+                { name: 'Attribute', value: 'Value' },
+                { name: 'Attribute', value: 'Value' },
+                { name: 'Attribute', value: 'Value' },
+                // Add more attributes as needed
+            ]
+        };
+        
+        document.getElementById("project-info-section").appendChild(ProjectInfo.generate(projectInfo));
 
+        const rootElement = document.getElementById("project-components");
 
         data.story.content.body.forEach(content => {
             if (components.hasOwnProperty(content.component)) {
