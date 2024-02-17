@@ -295,7 +295,7 @@ class ProjectInfo {
         const {
             name,
             projectDescription,
-            creators,
+            designers,
             designDisciplines,
             createdFor,
             yearCreated,
@@ -365,24 +365,24 @@ class ProjectInfo {
             attributeComponent.appendChild(attributeValue);
 
             if (i == 0) {
-                attributeHeading.textContent = "Designer";
-                attributeValue.textContent = "Ben";
+                attributeHeading.innerHTML = designers.length == 1 ? "Designer" : "Designers";
+                attributeValue.innerHTML = designers.join(', ');  
             }
             else if (i == 1) {
-                attributeHeading.textContent = "Created For";
-                attributeValue.textContent = `${createdFor}, ${yearCreated}`;
+                attributeHeading.innerHTML = "Created For";
+                attributeValue.innerHTML = `${createdFor}, ${yearCreated}`;
             }
             else if (i == 2) {
-                attributeHeading.textContent = "Tools Used";
-                attributeValue.textContent = tools.join(', ');
+                attributeHeading.innerHTML = "Tools Used";
+                attributeValue.innerHTML = tools.join(', ');
             }
             else if (i == 3) {
-                attributeHeading.textContent = "Project Length";
-                attributeValue.textContent = projectLength;
+                attributeHeading.innerHTML = "Project Length";
+                attributeValue.innerHTML = projectLength;
             }
             else if (i == 4) {
-                attributeHeading.textContent = "Project Link"
-                attributeValue.textContent = projectLink
+                attributeHeading.innerHTML = "Project Link"
+                attributeValue.innerHTML = `<a href="${projectLink.linktype == "story" ? "/" : ""}${projectLink["cached_url"]}" target="_blank">Link</a>`;
             }
         }
 
@@ -394,7 +394,7 @@ class ProjectInfo {
         const img = document.createElement('img');
         img.src = mainImage.filename;
         img.alt = mainImage.alt;
-        img.className = 'project-component-image';
+        img.className = 'project-hero';
         heroContainer.appendChild(img);
 
         return projectInfoContainer;
