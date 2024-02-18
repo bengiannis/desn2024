@@ -396,7 +396,8 @@ class ProjectInfo {
                 attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
             }
             else {
-                continue;
+                attributeHeading.innerHTML = "NOOOOOO";
+                //continue;
             }
             
             attributeComponent.appendChild(attributeHeading);
