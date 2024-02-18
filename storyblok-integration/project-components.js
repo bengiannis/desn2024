@@ -182,10 +182,10 @@ class VideoEmbed {
         videoComponent.className = 'project-component';
 
         const gridContainer = document.createElement('div');
-        gridContainer.className = "full-width-image-grid";
+        gridContainer.className = "full-width-video-grid";
 
         const videoColumn = document.createElement('div');
-        videoColumn.className = "project-component-image-area";
+        videoColumn.className = "project-component-video-area";
 
         const videoElement = document.createElement('video');
         videoElement.className = 'project-component-video';
@@ -194,10 +194,6 @@ class VideoEmbed {
         if (muted) videoElement.setAttribute('muted', '');
         videoElement.innerHTML = `<source src="${video.filename}" type="video/mp4">`;
         videoColumn.appendChild(videoElement);
-
-        const captionDiv = document.createElement('div');
-        captionDiv.className = "caption";
-        captionDiv.textContent = caption.replace(/\s(?=[^\s]*$)/, '\u00A0');
 
         gridContainer.appendChild(videoColumn);
 
