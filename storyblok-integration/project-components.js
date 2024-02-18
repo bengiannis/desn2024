@@ -253,7 +253,7 @@ class Paragraph {
                 }
     
                 bodyItem.content.forEach(richTextItem => {
-                    let textContent = richTextItem.text;
+                    let textContent = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');;
                     
                     if (richTextItem.marks) {
                         richTextItem.marks.forEach(mark => {
