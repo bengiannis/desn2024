@@ -357,14 +357,11 @@ class ProjectInfo {
         for (let i = 0; i < (projectLinkExists ? 5 : 4); i++) {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
-            projectInfoGridColumn.appendChild(attributeComponent);
         
             const attributeHeading = document.createElement('h5');
-            attributeComponent.appendChild(attributeHeading);
         
             const attributeValue = document.createElement('div');
             attributeValue.className = 'small-paragraph';
-            attributeComponent.appendChild(attributeValue);
 
             if (i == 0) {
                 attributeHeading.innerHTML = designers.length == 1 ? "Designer" : "Designers";
@@ -398,6 +395,14 @@ class ProjectInfo {
 
                 attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
             }
+            else {
+                continue;
+            }
+            
+            attributeComponent.appendChild(attributeHeading);
+            attributeComponent.appendChild(attributeValue);
+
+            projectInfoGridColumn.appendChild(attributeComponent);
         }
 
         // Project Hero
