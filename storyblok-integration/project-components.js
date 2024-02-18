@@ -174,6 +174,43 @@ class ImageAndText {
     }
 }
 
+class VideoEmbed {
+    static generate(content) {
+        const { video, loop, autoplay, muted } = content;
+
+        const videoComponent = document.createElement('div');
+        videoComponent.className = 'project-component';
+
+        const gridContainer = document.createElement('div');
+        gridContainer.className = "full-width-image-grid";
+
+        const videoColumn = document.createElement('div');
+        videoColumn.className = "project-component-image-area";
+
+        const videoElement = document.createElement('video');
+        videoElement.className = 'project-component-video';
+        if (loop) videoElement.setAttribute('loop', '');
+        if (autoplay) videoElement.setAttribute('autoplay', '');
+        if (muted) videoElement.setAttribute('muted', '');
+        videoElement.innerHTML = `<source src="${video.filename}" type="video/mp4">`;
+        videoColumn.appendChild(videoElement);
+
+        const captionDiv = document.createElement('div');
+        captionDiv.className = "caption";
+        captionDiv.textContent = caption.replace(/\s(?=[^\s]*$)/, '\u00A0');
+
+        gridContainer.appendChild(videoColumn);
+
+        if (caption) {
+            gridContainer.appendChild(captionDiv);
+        }
+
+        videoComponent.appendChild(gridContainer);
+
+        return videoComponent;
+    }
+}
+
 class RegularHeading {
     static generate(content) {
         const { alignment, text } = content;
@@ -425,6 +462,7 @@ const components = {
     "single_image": SingleImage,
     "two_images": TwoImages,
     "image_and_text": ImageAndText,
+    "video_embed": VideoEmbed,
     "regular_heading": RegularHeading,
     "small_heading": SmallHeading,
     "paragraph": Paragraph,
