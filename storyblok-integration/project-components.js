@@ -368,7 +368,7 @@ class ProjectInfo {
 
             if (i == 0) {
                 attributeHeading.innerHTML = designers.length == 1 ? "Designer" : "Designers";
-                attributeValue.innerHTML = designers.join(', ');  
+                attributeValue.innerHTML = designers.map((s, i) => i ? s.replace(/ /g, '\u00A0') : s).join(', ');
             }
             else if (i == 1) {
                 attributeHeading.innerHTML = "Created For";
@@ -376,7 +376,7 @@ class ProjectInfo {
             }
             else if (i == (projectLinkExists ? 2 : 3)) {
                 attributeHeading.innerHTML = "Tools Used";
-                attributeValue.innerHTML = tools.join(', ');
+                attributeValue.innerHTML = tools.map((s, i) => i ? s.replace(/ /g, '\u00A0') : s).join(', ');
             }
             else if (i == (projectLinkExists ? 3 : 4)) {
                 attributeHeading.innerHTML = "Project Length";
