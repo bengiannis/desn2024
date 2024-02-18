@@ -331,6 +331,7 @@ class ProjectInfo {
         const descriptionText = document.createElement('p');
         descriptionText.className = 'small-paragraph';
         descriptionText.textContent = projectDescription;
+        element.textContent = projectDescription.replace(/\s(?=[^\s]*$)/, '\u00A0');
         descriptionComponent.appendChild(descriptionText);
 
         // Tags
@@ -382,7 +383,7 @@ class ProjectInfo {
                 attributeHeading.innerHTML = "Project Length";
                 attributeValue.innerHTML = projectLength;
             }
-            else if (i == 4) {
+            else if (i == 4 && projectLinkExists) {
                 attributeHeading.innerHTML = "Project Link";
 
                 let linkURL = "";
