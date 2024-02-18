@@ -181,11 +181,8 @@ class VideoEmbed {
         const videoComponent = document.createElement('div');
         videoComponent.className = 'project-component';
 
-        const gridContainer = document.createElement('div');
-        gridContainer.className = "full-width-video-grid";
-
-        const videoColumn = document.createElement('div');
-        videoColumn.className = "project-component-video-area";
+        const videoContainer = document.createElement('div');
+        videoContainer.className = "full-width-video-container";
 
         const videoElement = document.createElement('video');
         videoElement.className = 'project-component-video';
@@ -193,15 +190,9 @@ class VideoEmbed {
         if (autoplay) videoElement.setAttribute('autoplay', '');
         if (muted) videoElement.setAttribute('muted', '');
         videoElement.innerHTML = `<source src="${video.filename}" type="video/mp4">`;
-        videoColumn.appendChild(videoElement);
+        videoContainer.appendChild(videoElement);
 
-        gridContainer.appendChild(videoColumn);
-
-        if (caption) {
-            gridContainer.appendChild(captionDiv);
-        }
-
-        videoComponent.appendChild(gridContainer);
+        videoComponent.appendChild(videoContainer);
 
         return videoComponent;
     }
