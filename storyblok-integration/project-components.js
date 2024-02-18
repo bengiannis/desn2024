@@ -354,7 +354,7 @@ class ProjectInfo {
         const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
         
         // Attributes
-        for (let i = 0; i < (projectLinkExists ? 5 : 4); i++) {
+        for (let i = 0; i < 5; i++) {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
         
@@ -396,8 +396,7 @@ class ProjectInfo {
                 attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
             }
             else {
-                attributeHeading.innerHTML = "NOOOOOO";
-                //continue;
+                continue;
             }
             
             attributeComponent.appendChild(attributeHeading);
