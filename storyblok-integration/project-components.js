@@ -330,8 +330,7 @@ class ProjectInfo {
 
         const descriptionText = document.createElement('p');
         descriptionText.className = 'small-paragraph';
-        descriptionText.textContent = projectDescription;
-        element.textContent = projectDescription.replace(/\s(?=[^\s]*$)/, '\u00A0');
+        descriptionText.textContent = projectDescription.replace(/\s(?=[^\s]*$)/, '\u00A0');
         descriptionComponent.appendChild(descriptionText);
 
         // Tags
