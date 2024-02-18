@@ -21,7 +21,7 @@ class SingleImage {
 
         const captionDiv = document.createElement('div');
         captionDiv.className = "caption";
-        captionDiv.textContent = caption;
+        captionDiv.textContent = caption.replace(/\s(?=[^\s]*$)/, '\u00A0');
 
         gridContainer.appendChild(imageColumn);
 
@@ -57,7 +57,7 @@ class TwoImages {
 
         const caption1Div = document.createElement('div');
         caption1Div.classList.add("caption", "in-large-grid", "left");
-        caption1Div.textContent = caption1;
+        caption1Div.textContent = caption1.replace(/\s(?=[^\s]*$)/, '\u00A0');
 
         const image2Column = document.createElement('div');
         image2Column.classList.add("project-component-image-area", "right");
@@ -70,7 +70,7 @@ class TwoImages {
 
         const caption2Div = document.createElement('div');
         caption2Div.classList.add("caption", "in-large-grid", "right");
-        caption2Div.textContent = caption2;
+        caption2Div.textContent = caption2.replace(/\s(?=[^\s]*$)/, '\u00A0');
 
         gridContainer.appendChild(image1Column);
 
@@ -112,7 +112,7 @@ class ImageAndText {
 
         const captionDiv = document.createElement('div');
         captionDiv.className = 'caption';
-        captionDiv.textContent = caption;
+        captionDiv.textContent = caption.replace(/\s(?=[^\s]*$)/, '\u00A0');
 
         const textColumn = document.createElement('div');
         textColumn.className = 'project-component-text-area';
@@ -140,7 +140,7 @@ class ImageAndText {
                 }
     
                 bodyItem.content.forEach(richTextItem => {
-                    let text = richTextItem.text;
+                    let text = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');
                     
                     if (richTextItem.marks) {
                         richTextItem.marks.forEach(mark => {
@@ -190,7 +190,7 @@ class RegularHeading {
         gridContainer.appendChild(textColumn);
 
         const headingElement = document.createElement('h3');
-        headingElement.textContent = text;
+        headingElement.textContent = text.replace(/\s(?=[^\s]*$)/, '\u00A0');
         textColumn.appendChild(headingElement);
 
         return regularHeadingComponent;
@@ -214,7 +214,7 @@ class SmallHeading {
         gridContainer.appendChild(textColumn);
 
         const subheadingElement = document.createElement('h4');
-        subheadingElement.textContent = text;
+        subheadingElement.textContent = text.replace(/\s(?=[^\s]*$)/, '\u00A0');
         textColumn.appendChild(subheadingElement);
 
         return largeHeadingComponent;
@@ -253,7 +253,7 @@ class Paragraph {
                 }
     
                 bodyItem.content.forEach(richTextItem => {
-                    let textContent = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');;
+                    let textContent = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');
                     
                     if (richTextItem.marks) {
                         richTextItem.marks.forEach(mark => {
@@ -311,7 +311,7 @@ class ProjectInfo {
         // Project Title
         const projectTitle = document.createElement('h1');
         projectTitle.className = 'project-title';
-        projectTitle.textContent = name;
+        projectTitle.textContent = name.replace(/\s(?=[^\s]*$)/, '\u00A0');
         projectInfoContainer.appendChild(projectTitle);
 
         // Grid for project description and attributes
