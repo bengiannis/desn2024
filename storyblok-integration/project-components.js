@@ -189,6 +189,7 @@ class VideoEmbed {
         if (loop) videoElement.setAttribute('loop', '');
         if (autoplay) videoElement.setAttribute('autoplay', '');
         if (muted) videoElement.setAttribute('muted', '');
+        videoElement.setAttribute('controls', '');
         videoElement.innerHTML = `<source src="${video.filename}" type="video/mp4">`;
         videoContainer.appendChild(videoElement);
 
