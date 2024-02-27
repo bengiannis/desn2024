@@ -224,11 +224,15 @@ class FigmaEmbed {
 
         embedContainer.innerHTML = modifiedEmbedCode;
 
+        const mobileFigmaEmbed = document.createElement('div');
+        mobileFigmaEmbed.className = "mobile-figma-embed";
+        figmaComponent.appendChild(mobileFigmaEmbed);
+
         const mobileCTALink = document.createElement('a');
         mobileCTALink.className = 'cta-link';
         mobileCTALink.href = embedSrc;
         mobileCTALink.target = "_blank";
-        figmaComponent.appendChild(mobileCTALink);
+        mobileFigmaEmbed.appendChild(mobileCTALink);
 
         const mobileCTALinkText = document.createElement('div');
         mobileCTALinkText.className = "cta-link-text";
