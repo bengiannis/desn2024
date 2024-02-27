@@ -203,10 +203,24 @@ class FigmaEmbed {
     static generate(content) {
         const { embedCode } = content;
 
+        const modifiedEmbedCode = embedCode.replace(/style=['"][^'"]*['"]/, '').replace(/width=['"][^'"]*['"]/, 'width="100%"').replace(/height=['"][^'"]*['"]/, 'height="100%"');
+
         const figmaComponent = document.createElement('div');
         figmaComponent.className = 'project-component';
 
-        console.log(embedCode);
+        const gridContainer = document.createElement('div');
+        gridContainer.className = "full-width-figma-grid";
+        figmaComponent.appendChild(gridContainer);
+
+        const gridArea = document.createElement('div');
+        gridArea.className = "full-width-figma-embed-area";
+        gridContainer.appendChild(gridArea);
+
+        const embedContainer = document.createElement('div');
+        embedContainer.className = "figma-embed-container";
+        gridArea.appendChild(embedContainer);
+
+        embedContainer.innerHTML = modifiedEmbedCode;
 
         return figmaComponent;
     }
