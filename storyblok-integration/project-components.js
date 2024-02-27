@@ -204,6 +204,8 @@ class FigmaEmbed {
         const { embedCode } = content;
 
         const modifiedEmbedCode = embedCode.replace(/style=['"][^'"]*['"]/, '').replace(/width=['"][^'"]*['"]/, 'width="100%"').replace(/height=['"][^'"]*['"]/, 'height="100%"');
+        const embedSrc = embedCode.match(/src=['"]([^'"]+)['"]/)?.[1] || null;
+        const isPrototype = /https%3A%2F%2Fwww\.figma\.com%2Fproto\//.test(embedSrc || '');
 
         const figmaComponent = document.createElement('div');
         figmaComponent.className = 'project-component';
@@ -221,6 +223,17 @@ class FigmaEmbed {
         gridArea.appendChild(embedContainer);
 
         embedContainer.innerHTML = modifiedEmbedCode;
+
+        const mobileCTALink = document.createElement('a');
+        mobileCTALink.className = 'cta-link';
+        mobileCTALink.href = embedSrc;
+        mobileCTALink.target = "_blank";
+        figmaComponent.appendChild(mobileCTALink);
+
+        const mobileCTALinkText = document.createElement('div');
+        mobileCTALinkText.className = "cta-link-text";
+        mobileCTALink.textContent = isPrototype ? "Open Figma Prototype" : "Open in Figma";
+        mobileCTALink.appendChild(mobileCTALinkText);
 
         return figmaComponent;
     }
