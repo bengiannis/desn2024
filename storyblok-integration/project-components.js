@@ -199,6 +199,19 @@ class VideoEmbed {
     }
 }
 
+class FigmaEmbed {
+    static generate(content) {
+        const { embedCode } = content;
+
+        const figmaComponent = document.createElement('div');
+        figmaComponent.className = 'project-component';
+
+        console.log(embedCode);
+
+        return figmaComponent;
+    }
+}
+
 class RegularHeading {
     static generate(content) {
         const { alignment, text } = content;
@@ -447,13 +460,14 @@ class ProjectInfo {
 
 
 const components = {
+    "regular_heading": RegularHeading,
+    "small_heading": SmallHeading,
+    "paragraph": Paragraph,
     "single_image": SingleImage,
     "two_images": TwoImages,
     "image_and_text": ImageAndText,
     "video_embed": VideoEmbed,
-    "regular_heading": RegularHeading,
-    "small_heading": SmallHeading,
-    "paragraph": Paragraph,
+    "figma_embed": FigmaEmbed,
     "divider_line": DividerLine
     // Add more components here
 };
