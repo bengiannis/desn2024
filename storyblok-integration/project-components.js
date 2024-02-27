@@ -236,7 +236,7 @@ class FigmaEmbed {
 
         const mobileCTALinkText = document.createElement('div');
         mobileCTALinkText.className = "cta-link-text";
-        mobileCTALink.textContent = isPrototype ? "Open Figma Prototype" : "Open in Figma";
+        mobileCTALinkText.textContent = isPrototype ? "Open Figma Prototype" : "Open in Figma";
         mobileCTALink.appendChild(mobileCTALinkText);
 
         return figmaComponent;
