@@ -62,9 +62,9 @@ class TwoImages {
         const image2Column = document.createElement('div');
         image2Column.classList.add("project-component-image-area", "right");
         const img2 = document.createElement('img');
-        img2.src = image1.filename;
+        img2.src = image2.filename;
         img2.loading = 'lazy';
-        img2.alt = image1.alt;
+        img2.alt = image2.alt;
         img2.className = 'project-component-image';
         image2Column.appendChild(img2);
 
