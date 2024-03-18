@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>p5.js Fullscreen with SVG and Physics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+
+<div id="canvasContainer"></div> <!-- Container for the p5.js canvas -->
+
+<script>
+  let offScreenGraphics;
+  let svg;
+  let particles = [];
+  const particleCount = 1000;
+  const initialVelocity = 10; // Initial velocity distance
+  const initialPositionOffset = 200; // Initial position distance
+  let svgWidth, svgHeight;
+  const maxDimension = 800; // Maximum dimension for SVG
+
+  let imageCache = {};
+  let specialImages = [];
+  let pixelData, specialData;
+
+  let loaded = false;
+
+  function preload() {
+    svg = loadImage('hero.svg', img => {
+      // Calculate aspect ratio and set dimensions
+      const aspectRatio = img.width / img.height;
+      if (img.width > img.height) {
+        svgWidth = maxDimension;
+        svgHeight = maxDimension / aspectRatio;
+      } else {
+        svgWidth = maxDimension * aspectRatio;
+        svgHeight = maxDimension;
+      }
+    });
+  }
+
+  async function loadData() {
+    const pixelResponse = await fetch('/design/pixels.json');
+    pixelData = await pixelResponse.json();
+    const specialResponse = await fetch('/design/special.json');
+    specialData = await specialResponse.json();
+
+    Object.keys(pixelData).forEach(key => {
+      imageCache[key] = createImageFromData(pixelData[key]);
+    });
+
+    Object.keys(specialData).forEach((key, index) => {
+      specialImages[index] = {"brightness": specialData[key]["brightness"], "array": createImageFromData(specialData[key]['array'])};
+    });
+
+    loaded = true;
+  }
+
+  function createImageFromData(data) {
+    const img = createImage(9, 9);
+    img.loadPixels();
+
+    for (let x = 0; x < 9; x++) {
+      for (let y = 0; y < 9; y++) {
+        const color = data[y][x] === 1 ? [243, 244, 250] : [9, 15, 23];
+        let index = 4 * (y * 9 + x);
+        img.pixels[index] = color[0];
+        img.pixels[index + 1] = color[1];
+        img.pixels[index + 2] = color[2];
+        img.pixels[index + 3] = 255;
+      }
+    }
+    img.updatePixels();
+    return img;
+  }
+
+  async function setup() {
+    await loadData();
+    createCanvas(windowWidth, windowHeight);
+    noSmooth();
+    offScreenGraphics = createGraphics(svgWidth, svgHeight);
+    offScreenGraphics.image(svg, 0, 0, svgWidth, svgHeight);
+    background('#090F17');
+    
+    // Initialize particles
+    let hits = 0;
+    const svgX = (width - svgWidth) / 2;
+    const svgY = (height - svgHeight) / 2;
+
+    while (hits < particleCount) {
+      const x = Math.floor(random(svgX, svgX + svgWidth));
+      const y = Math.floor(random(svgY, svgY + svgHeight));
+
+      if (isInsideSVG(x, y)) {
+        particles.push(new Particle(x, y));
+        hits++;
+      }
+    }
+  }
+
+  function draw() {
+    background('#090F17');
+    for (let p of particles) {
+      p.update();
+      p.display();
+    }
+  }
+
+  function isInsideSVG(x, y) {
+    const translatedX = x - (width - svgWidth) / 2;
+    const translatedY = y - (height - svgHeight) / 2;
+
+    if (translatedX < 0 || translatedY < 0 || translatedX >= svgWidth || translatedY >= svgHeight) {
+      return false;
+    }
+
+    const pixel = offScreenGraphics.get(translatedX, translatedY);
+    return alpha(pixel) > 0;
+  }
+
+  class Particle {
+    constructor(x, y) {
+    this.anchor = createVector(x, y);
+
+    // Set offset and initial velocity based on axis
+    const offsetX = random(-initialPositionOffset, initialPositionOffset);
+    const offsetY = random(-initialPositionOffset, initialPositionOffset);
+    this.pos = createVector(this.anchor.x + offsetX, this.anchor.y + offsetY);
+    this.vel = createVector(random([-1, 1]), 0).mult(random(initialVelocity));
+
+    this.forceStrength = random(0.0003, 0.0008); // Random force strength
+    this.damping = 0.8;//random(0.92, 1); // Random damping factor
+
+    this.particleImageIndex = Math.floor(Math.random() * specialImages.length);
+  }
+
+  update() {
+    if (Math.random() < 0.1) {
+      // return;
+    }
+
+    let force = p5.Vector.sub(this.anchor, this.pos).mult(this.forceStrength * 20);
+    // Apply force only along the specified axis
+    // if (Math.random() < 0.5) {
+    // force.y = 0;
+    // }
+    // else {
+    // force.x = 0;
+    // }
+    this.vel.add(force); // Apply force
+    this.vel.mult(this.damping); // Apply damping
+    this.pos.add(this.vel);
+  }
+
+  display() {
+    fill('#F3F4FA');
+    noStroke();
+    image(specialImages[this.particleImageIndex]["array"], this.pos.x, this.pos.y);
+    // rect(this.pos.x, this.pos.y, 2, 2);
+  }
+}
+
+
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+  }
+</script>
+
+</body>
+</html>

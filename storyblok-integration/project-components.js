@@ -404,9 +404,12 @@ class ProjectInfo {
         descriptionComponent.appendChild(descriptionText);
 
         // Tags
+        const tagsContainerContainer = document.createElement('div');
+        tagsContainerContainer.className = 'project-tags-container';
+        descriptionComponent.appendChild(tagsContainerContainer);
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'specialty-tags-flex-component';
-        descriptionComponent.appendChild(tagsContainer);
+        tagsContainerContainer.appendChild(tagsContainer);
 
         designDisciplines.forEach(tag => {
             const tagElement = document.createElement('a');
