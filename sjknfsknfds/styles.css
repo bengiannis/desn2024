@@ -36,7 +36,7 @@ h1 {
 }
 
 .drop-zone {
-    border: 2px dashed #ffffff77;
+    border: 2px dashed #ccc;
     cursor: pointer;
     display: flex;
     justify-content: center;

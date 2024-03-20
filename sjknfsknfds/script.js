@@ -109,6 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         imageFileInput.click();
     });
 
+    resolutionSlider.addEventListener("input", function() {
+        resolutionSliderLabel.textContent = resolutionSlider.value;
+    });
+    resolutionSliderLabel.textContent = resolutionSlider.value;
+
     imageFileInput.addEventListener('change', async function(event) {
         event.preventDefault();
         const file = imageFileInput.files[0];
