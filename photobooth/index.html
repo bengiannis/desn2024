@@ -9,27 +9,9 @@
 <body>
     <div class="main">
         <h1>Photo Booth</h1>
-        <details>
-            <summary>Bitmap Effect</summary>
-            <div class="options">
-                <div>
-                    <span>Resolution</span>
-                    <input id="resolutionSlider" type="range" min="50" max="500" step="50" value="250">
-                    <label id="resolutionSliderLabel"></label>
-                </div>
-                <div>
-                    <span>Increase Contrast <span class="secondary-text">(Recommended)</span></span>
-                    <input id="increaseContrastCheckbox" type="checkbox" checked>
-                </div>
-            </div>
-          </details>          
         <div id="dropZone" class="drop-zone">
             <p>Drop images here</p>
-            <input type="file" id="imageFile" class="file-input" accept="image/*,video/*">
-        </div>
-        <div class="previews">
-            <canvas id="canvasBefore"></canvas>
-            <canvas id="canvasAfter"></canvas>
+            <input type="file" id="imageFile" class="file-input" accept="image/*">
         </div>
     </div>
 

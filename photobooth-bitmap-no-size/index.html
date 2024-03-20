@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo Booth Generator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="main">
+        <h1>Photo Booth</h1>
+        <details>
+            <summary>Bitmap Effect</summary>
+            <div class="options">
+                <div>
+                    <span>Resolution</span>
+                    <input id="resolutionSlider" type="range" min="50" max="500" step="50" value="250">
+                    <label id="resolutionSliderLabel"></label>
+                </div>
+                <div>
+                    <span>Increase Contrast <span class="secondary-text">(Recommended)</span></span>
+                    <input id="increaseContrastCheckbox" type="checkbox" checked>
+                </div>
+            </div>
+          </details>          
+        <div id="dropZone" class="drop-zone">
+            <p>Drop images here</p>
+            <input type="file" id="imageFile" class="file-input" accept="image/*,video/*">
+        </div>
+        <div class="previews">
+            <canvas id="canvasBefore"></canvas>
+            <canvas id="canvasAfter"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

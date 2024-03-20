@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const resolutionSlider = document.getElementById("resolutionSlider");
-    const resolutionSliderLabel = document.getElementById("resolutionSliderLabel");
-    const increaseContrastCheckbox = document.getElementById("increaseContrastCheckbox");
     const dropZone = document.getElementById('dropZone');
     const imageFileInput = document.getElementById('imageFile');
     const canvasBefore = document.getElementById('canvasBefore');
@@ -9,116 +6,72 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctxBefore = canvasBefore.getContext('2d');
     const ctxAfter = canvasAfter.getContext('2d');
     
-    const squareLength = 9;
-    let brightnessScale = 1;
-    let specialCount = 0;
-
-    let currentSpecialIndex = 0;
-
-    let pixelData = {}
-    fetch('/design/pixels.json')
-    .then(response => response.json())
-    .then(data => {
-        pixelData = data;
-        brightnessScale = Object.keys(pixelData).length - 1;
-    });
-
-    let specialData = {}
-    fetch('/design/special.json')
-    .then(response => response.json())
-    .then(data => {
-        specialData = data;
-        specialCount = Object.keys(specialData).length;
-    });
-
-    async function convertImageToBitmap(img) {
-        const resolution = resolutionSlider.value;
-        let width = img.width;
-        let height = img.height;
+    async function makeImagePhotoBoothReady(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
     
-        // Resize the image if needed
-        if (width > resolution || height > resolution) {
-            if (width > height) {
-                const scale = resolution / width;
-                width = resolution;
-                height = Math.floor(height * scale);
-            } else {
-                const scale = resolution / height;
-                height = resolution;
-                width = Math.floor(width * scale);
-            }
+        // Set canvas size
+        canvas.width = 900;
+        canvas.height = 1500;
+    
+        // Fill background with white
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+        // Calculate scale and position for object-fit: cover;
+        const imgRatio = img.width / img.height;
+        const targetRatio = 900 / 1300;
+        let drawWidth, drawHeight, offsetX, offsetY;
+    
+        if (imgRatio > targetRatio) {
+            // Image is wider than target
+            drawHeight = 1300;
+            drawWidth = img.width * (drawHeight / img.height);
+            offsetX = (900 - drawWidth) / 2;
+            offsetY = 0;
+        } else {
+            // Image is taller than target
+            drawWidth = 900;
+            drawHeight = img.height * (drawWidth / img.width);
+            offsetX = 0;
+            offsetY = (1300 - drawHeight) / 2;
         }
     
-        canvasBefore.width = width;
-        canvasBefore.height = height;
-        ctxBefore.drawImage(img, 0, 0, width, height);
+        // Draw the image centered and covering the specified part
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     
-        const imgData = ctxBefore.getImageData(0, 0, width, height);
-        const pixels = imgData.data;
-        const increaseContrast = increaseContrastCheckbox.checked;
-    
-        // Prepare the transformed pixels array for the effect
-        const transformedPixels = new Uint8ClampedArray(width * height * 4 * (squareLength * squareLength));
-    
-        // Process each pixel for the effect
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const index = (y * width + x) * 4;
-                let grayscale = (pixels[index] * 0.3 + pixels[index + 1] * 0.59 + pixels[index + 2] * 0.11) / 255;
-                if (increaseContrast) {
-                    grayscale = (1 - Math.cos(Math.PI * Math.max(0, Math.min(grayscale / 0.8 - 0.1, 1)))) / 2;
-                }
-                const mappedValue = Math.max(0, Math.min(brightnessScale, Math.floor(grayscale * brightnessScale)));
-                let square = [];
-    
-                if (Math.abs(specialData[currentSpecialIndex]["brightness"] - mappedValue) < 8) {
-                    square = specialData[currentSpecialIndex]["array"];
-                    currentSpecialIndex = (currentSpecialIndex >= specialCount - 1) ? 0 : currentSpecialIndex + 1;
-                } else {
-                    square = pixelData[mappedValue];
-                }
-    
-                for (let i = 0; i < squareLength; i++) {
-                    for (let j = 0; j < squareLength; j++) {
-                        const brightness = square[i][j] * 255;
-                        const transformedIndex = (((y * squareLength + i) * width * squareLength) + (x * squareLength + j)) * 4;
-                        transformedPixels[transformedIndex] = brightness;
-                        transformedPixels[transformedIndex + 1] = brightness;
-                        transformedPixels[transformedIndex + 2] = brightness;
-                        transformedPixels[transformedIndex + 3] = 255;  // Alpha channel
-                    }
-                }
-            }
+        // Convert the entire canvas (image) to greyscale using NTSC formula
+        let imageData = ctx.getImageData(0, 0, 900, 1500);
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            let grey = 0.299 * imageData.data[i] + 0.587 * imageData.data[i + 1] + 0.114 * imageData.data[i + 2];
+            imageData.data[i] = grey;
+            imageData.data[i + 1] = grey;
+            imageData.data[i + 2] = grey;
         }
+        ctx.putImageData(imageData, 0, 0);
     
-        // Prepare the canvas for the final image
-        canvasAfter.width = width * squareLength;
-        canvasAfter.height = height * squareLength + 200;  // Add 200px for the footer
-        const newImgData = ctxAfter.createImageData(canvasAfter.width, canvasAfter.height);
-        newImgData.data.set(transformedPixels);
-        ctxAfter.putImageData(newImgData, 0, 0);
+        // Clear the bottom area before drawing the logo
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 1300, 900, 200);
     
-        // Fill the footer background (optional, white here)
-        ctxAfter.fillStyle = "#FFFFFF";
-        ctxAfter.fillRect(0, height * squareLength, canvasAfter.width, 200);
-    
-        // Load and center the logo in the footer
-        const logo = new Image();
-        logo.src = './logo.svg';
-        await new Promise(resolve => {
-            logo.onload = () => {
-                const logoWidth = logo.width;
-                const logoHeight = logo.height;
-                const logoX = (canvasAfter.width - logoWidth) / 2;
-                const logoY = height * squareLength + (200 - logoHeight) / 2;
-                ctxAfter.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
-                resolve();
-            };
+        // Load the logo
+        const logo = await new Promise((resolve) => {
+            const logoImg = new Image();
+            logoImg.onload = () => resolve(logoImg);
+            logoImg.src = './logo.svg';
         });
     
-        const dataURL = canvasAfter.toDataURL('image/png');
-        return dataURL;
-    }    
+        // Calculate logo dimensions to maintain aspect ratio
+        const logoHeight = (logo.height / logo.width) * 300;
+        const logoY = 1300 + (200 - logoHeight) / 2;
+    
+        // Draw the logo in the bottom center with a width of 300px
+        ctx.drawImage(logo, (canvas.width - 300) / 2, logoY, 300, logoHeight);
+    
+        // Return the canvas data as a data URL
+        return canvas.toDataURL();
+    }
+    
 
     async function generateImage(file) {
         const img = new Image();
@@ -129,12 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         });
 
-        const convertedImage = await convertImageToBitmap(img);
+        const convertedImage = await makeImagePhotoBoothReady(img);
 
         // Trigger download of the transformed image
         const link = document.createElement('a');
         link.href = convertedImage;
-        link.download = `Resolution-${resolutionSlider.value}${increaseContrastCheckbox.checked ? '-H' : ''}-${file.name.split('.').slice(0, -1).join('.')}.png`;
+        link.download = `Resolution-Photo-Booth-${new Date().toISOString()}-${file.name.split('.').slice(0, -1).join('.')}.png`;
         link.click();
     }
 
