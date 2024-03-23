@@ -12,7 +12,7 @@ let loadedPixels = false;
 let loadedTextImageData = false;
 let currentText = "";
 let currentTextImageData = {9: [], 18: [], 36: [], 72: [], 144: [], 288: []};
-let fractalNoiseLimits = {9: 1, 18: 0.5, 36: 0.4, 72: 0.3, 144: 0.2, 288: 0.1};
+let fractalNoiseLimits = {9: 1, 18: 0.48, 36: 0.36, 72: 0.24, 144: 0.20, 288: 0.16};
 
 // Canvas Setup
 
@@ -59,17 +59,24 @@ function draw() {
         let distanceToCursor = dist(x, y, (mouseX / resizeFactor) / scale, (mouseY / resizeFactor) / scale);
         const noiseX = noise(x);
         const noiseY = noise(y);
-        const noiseFrame =  noise(frameCount / 30);
-        const noiseTotal = (noiseX + noiseY + noiseFrame) / 3;
+        const noiseFrame = noise(frameCount / 40);
+        const noiseTotal = (noiseX + noiseY + noiseFrame)/3;
 
-        let fractalNoise = noise(frameCount / 30 + noiseX + noiseY);
+        let fractalNoise;
+        if (frameCount < 90) {
+          // Intro Animation
+          fractalNoise = Math.min(frameCount / (120 - noiseTotal*70), 1) - Math.min(Math.max(0, (frameCount - 60) / 30), 1) + noise(frameCount / 30 + noiseX + noiseY) * Math.min(Math.max(0.1, (frameCount - 60) / 30), 1);
+        }
+        else {
+          fractalNoise = noise(frameCount / 30 + noiseX + noiseY);
+        }
 
         if (fractalNoise > fractalNoiseLimits[scale]) {
           continue;
         }
 
-        const xOffset = Math.round((noise(y + noiseFrame) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * 50));
-        const yOffset = Math.round((noise(x + noiseFrame) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * 50));
+        const xOffset = Math.round((noise(y + scale) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * noiseFrame*100));
+        const yOffset = Math.round((noise(x + scale) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * noiseFrame*100));
 
         const brightnessIndex = Math.max(0, Math.min(Math.round((y + yOffset) * cols + (x + xOffset)), cols * rows));
         const avgBrightness = currentTextImageData[scale][brightnessIndex] || 0;
@@ -149,7 +156,7 @@ function renderTextImageData(txt = currentText) {
     graphics.textFont(FKRasterRomanCompactFont);
     graphics.textAlign(CENTER, CENTER);
     graphics.textSize(128 / scale);
-    graphics.text(txt, (scaledW - 0.5) / 2, (scaledH - 0.5) / 2);
+    graphics.text(txt, (scaledW - 0.75) / 2, (scaledH - 0.75) / 2);
     img.updatePixels();
     img.copy(graphics, 0, 0, scaledW, scaledH, 0, 0, scaledW, scaledH);
 
