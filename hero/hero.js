@@ -29,6 +29,9 @@ async function setup() {
   windowResized();
 
   renderTextImageData("It's Clear Now");
+  // renderTextImageData("Resolution isn't just an exhibition");
+  // renderTextImageData("It's a declaration of who we are");
+  // renderTextImageData("And what design makes us");
 }
 
 function windowResized() {
@@ -97,9 +100,7 @@ function draw() {
 }
 
 
-
 // Functions
-
 
 async function loadData() {
   const pixelResponse = await fetch('/design/pixels.json');
@@ -139,23 +140,25 @@ function createImageFromData(data) {
 function renderTextImageData(txt = currentText) {
   currentText = txt;
 
+  const fontSize = width/32 + 72;
+
   for (const scale in currentTextImageData) {
 
-    // Scale down the dimensions for the initial image creation
+    const maxWidth = Math.min((width - 48)/scale, fontSize * 0.9);
+
     let scaledW = Math.ceil(width / scale);
     let scaledH = Math.ceil(height / scale);
 
     let img = createImage(scaledW, scaledH);
     img.loadPixels();
 
-    // Use a smaller graphics context for text rendering
     let graphics = createGraphics(scaledW, scaledH);
     graphics.background(0);
-    graphics.fill(255); // Set text color to white
+    graphics.fill(255);
     graphics.textFont(FKRasterRomanCompactFont);
     graphics.textAlign(CENTER, CENTER);
-    graphics.textSize(128 / scale);
-    graphics.text(txt, (scaledW - 0.75) / 2, (scaledH - 0.75) / 2);
+    graphics.textSize(fontSize / scale);
+    graphics.text(txt, (scaledW - 2.5 - 0.75 - maxWidth) / 2, (scaledH - 0.75) / 2, maxWidth);
     img.updatePixels();
     img.copy(graphics, 0, 0, scaledW, scaledH, 0, 0, scaledW, scaledH);
 
@@ -175,29 +178,4 @@ function renderTextImageData(txt = currentText) {
   }
 
   loadedTextImageData = true;
-}
-
-function perlinNoise(coordinate, scale, detail = 1, roughness = 0) {
-  let [x, y = 0, z = 0] = coordinate;
-  let frequency = 1;
-  let amplitude = 1;
-  let output = 0;
-  let amplitudeSum = 0;
-
-  x *= scale;
-  y *= scale;
-  z *= scale;
-
-  for (let i = 0; i < detail; i++) {
-    output += noise(x * frequency, y * frequency, z * frequency) * amplitude;
-    amplitudeSum += amplitude;
-
-    // Update frequency and amplitude for the next octave
-    frequency *= 2;
-    amplitude *= roughness;
-  }
-
-  // Normalize to [0, 1]
-  output = output / amplitudeSum;
-  return output;
 }
