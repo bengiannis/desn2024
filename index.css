@@ -36,8 +36,29 @@ header {
     right: max(27px, env(safe-area-inset-right));
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1.5rem;
     z-index: 1;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.cta-button {
+    font-weight: 600;
+    background-color: #F3F4FA;
+    color: #090F17;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.1s;
+}
+
+.cta-button:hover {
+    background-color: white;
 }
 
 .logo {
@@ -112,7 +133,7 @@ footer {
     right: max(27px, env(safe-area-inset-right));
     display: flex;
     gap: 2rem;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     transition: opacity 0.5s;
 }

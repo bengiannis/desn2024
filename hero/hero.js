@@ -56,7 +56,6 @@ function draw() {
   
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
-        let distanceToCursor = dist(x, y, (mouseX / resizeFactor) / scale, (mouseY / resizeFactor) / scale);
         const noiseX = noise(x);
         const noiseY = noise(y);
         const noiseFrame = noise(frameCount / 40);
