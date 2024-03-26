@@ -1,3 +1,5 @@
+// Hero Animation
+
 let canvas;
 
 let FKRasterRomanCompactFont;
@@ -14,10 +16,12 @@ let currentText = "";
 let currentTextImageData = {9: [], 18: [], 36: [], 72: [], 144: [], 288: []};
 let fractalNoiseLimits = {9: 1, 18: 0.48, 36: 0.36, 72: 0.24, 144: 0.20, 288: 0.16};
 
+let gain = 0.5;
+
 // Canvas Setup
 
 function preload() {
-  FKRasterRomanCompactFont = loadFont('/fonts/FKRasterRomanCompact/FKRasterRomanCompact-Blended.otf');
+  FKRasterRomanCompactFont = loadFont('https://resources.desn2024.com/fonts/FKRasterRomanCompact/FKRasterRomanCompact-Blended.otf');
 }
 
 async function setup() {
@@ -47,6 +51,7 @@ function windowResized() {
 
 // Canvas Loop
 
+
 function draw() {
   if (!loadedPixels || !loadedTextImageData) {
     return;
@@ -70,15 +75,17 @@ function draw() {
           fractalNoise = Math.min(frameCount / (120 - noiseTotal*70), 1) - Math.min(Math.max(0, (frameCount - 60) / 30), 1) + noise(frameCount / 30 + noiseX + noiseY) * Math.min(Math.max(0.1, (frameCount - 60) / 30), 1);
         }
         else {
-          fractalNoise = noise(frameCount / 30 + noiseX + noiseY) * (1 - Math.abs(2 * gain - 1)) + Math.max(0, 2 * gain - 1);
+          fractalNoise = noise(frameCount / 30 + noiseX + noiseY) * (1 - Math.abs(2 * gain - 1)) + Math.max(0, 1 - 2 * gain) + Math.max(0, 0.35 * (gain - 0.5));
         }
 
         if (fractalNoise > fractalNoiseLimits[scale]) {
           continue;
         }
+        
+        const scrollOffset = Math.round((((window.scrollY/(scale)/2)) % noise(scale+20*noiseTotal)*(scale/36)));
 
         const xOffset = Math.round((noise(y + scale) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * noiseFrame*100));
-        const yOffset = Math.round((noise(x + scale) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * noiseFrame*100));
+        const yOffset = Math.round((noise(x + scale) - 0.5) * (Math.max(0, (0.8 - fractalNoiseLimits[scale])) * noiseFrame*100)) + scrollOffset;
 
         const brightnessIndex = Math.max(0, Math.min(Math.round((y + yOffset) * cols + (x + xOffset)), cols * rows));
         const avgBrightness = currentTextImageData[scale][brightnessIndex] || 0;
@@ -99,13 +106,12 @@ function draw() {
   }
 }
 
-
 // Functions
 
 async function loadData() {
-  const pixelResponse = await fetch('/design/pixels.json');
+  const pixelResponse = await fetch('https://resources.desn2024.com/design/pixels.json');
   pixelData = await pixelResponse.json();
-  const specialResponse = await fetch('/design/special.json');
+  const specialResponse = await fetch('https://resources.desn2024.com/design/special.json');
   specialData = await specialResponse.json();
 
   Object.keys(pixelData).forEach(key => {
@@ -179,3 +185,86 @@ function renderTextImageData(txt = currentText) {
 
   loadedTextImageData = true;
 }
+
+
+let animationFrameId = null;
+let startTime = null;
+let initialGain = 0;
+let targetGain = 1;
+let duration = 1000; // duration in milliseconds
+let phase = 0;
+let textToAnimateTo = "";
+
+function animateToNewText(newText) {
+	textToAnimateTo = newText;
+	startAnimation();
+}
+
+let currentTextSection = 0;
+
+const sectionTitles = ["It's Clear Now", "Resolution isn’t just an exhibition", "It's a declaration of who we are", "And what design makes us"];
+const heroContainer = document.getElementById("hero-container");
+
+const checkAndUpdateSection = () => {
+  const heroHeight = heroContainer.offsetHeight - window.innerHeight;
+  const sectionHeight = heroHeight / 4;
+  const newSection = Math.min(Math.floor(window.scrollY / sectionHeight), 3);
+
+  if (newSection !== currentTextSection) {
+    currentTextSection = newSection;
+    animateToNewText(sectionTitles[currentTextSection]);
+  }
+};
+
+window.addEventListener('scroll', checkAndUpdateSection);
+window.addEventListener('resize', checkAndUpdateSection);
+
+
+const animateGain = (timestamp) => {
+  if (!startTime) startTime = timestamp;
+  const progress = Math.min((timestamp - startTime) / duration, 1);
+  gain = initialGain + (targetGain - initialGain) * progress;
+
+  if (progress < 1) {
+    animationFrameId = requestAnimationFrame(animateGain);
+  } else {
+    phase++;
+    switch (phase) {
+      case 1:
+        // Animate to 0
+        renderTextImageData(textToAnimateTo);
+        initialGain = gain;
+        targetGain = 0.25;
+        duration = 800;
+        break;
+      case 2:
+        // Hold at 0 for 1 second
+        initialGain = gain;
+        targetGain = 0.25;
+        duration = 100;
+        break;
+      case 3:
+        // Animate to 0.5
+        initialGain = gain;
+        targetGain = (currentTextSection == 0) ? 0.5 : 0.4;
+        duration = 400;
+        break;
+      default:
+        return;
+    }
+    startTime = null;
+    animationFrameId = requestAnimationFrame(animateGain);
+  }
+};
+
+const startAnimation = () => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+  phase = 0;
+  initialGain = gain; // Assuming 'gain' is defined elsewhere
+  targetGain = 1;
+  duration = 700;
+  startTime = null;
+  animationFrameId = requestAnimationFrame(animateGain);
+};

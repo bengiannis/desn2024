@@ -1,0 +1,54 @@
+<script>
+const typedTextSpans = document.querySelectorAll(".typed-text");
+const cursorSpans = document.querySelectorAll(".cursor");
+
+const textArray = ["Friends", "Creatives", "Dynamic", "Clarity", "Changemakers", "Bold", "Designers"];
+const typingDelay = 200;
+const erasingDelay = 100;
+const newTextDelay = 2000; // Delay between current and next text
+let textArrayIndex = 0;
+let charIndex = 0;
+
+function typeLetter() {
+	console.log("typing");
+  if (charIndex < textArray[textArrayIndex].length) {
+    cursorSpans.forEach(cursorSpan => cursorSpan.classList.add("typing"));
+    typedTextSpans.forEach(typedTextSpan => {
+      typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+    });
+    charIndex++;
+    setTimeout(typeLetter, typingDelay);
+  } 
+  else {
+    cursorSpans.forEach(cursorSpan => cursorSpan.classList.remove("typing"));
+    setTimeout(eraseLetter, newTextDelay);
+  }
+}
+
+function eraseLetter() {
+	console.log("erasing", charIndex);
+  if (charIndex > 0) {
+	console.log("erasing 1");
+    cursorSpans.forEach(cursorSpan => cursorSpan.classList.add("typing"));
+    typedTextSpans.forEach(typedTextSpan => {
+      typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex-1);
+    });
+    charIndex--;
+    setTimeout(eraseLetter, erasingDelay);
+  } 
+  else {
+	console.log("erasing 2");
+    cursorSpans.forEach(cursorSpan => cursorSpan.classList.remove("typing"));
+    textArrayIndex++;
+    if(textArrayIndex>=textArray.length) textArrayIndex=0;
+    setTimeout(typeLetter, typingDelay + 1100);
+  }
+}
+
+	console.log("loaded");
+  if (textArray.length) {
+    charIndex = textArray[0].length;
+    setTimeout(eraseLetter, newTextDelay);
+  }
+
+</script>
