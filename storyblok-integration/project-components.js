@@ -376,7 +376,7 @@ class ProjectInfo {
         } = content;
 
         const projectInfoContainer = document.createElement('div');
-        projectInfoContainer.className = 'project-info-container w-container';
+        projectInfoContainer.className = 'story-info-container w-container';
 
         // Project Title
         const projectTitle = document.createElement('h1');
@@ -386,12 +386,12 @@ class ProjectInfo {
 
         // Grid for project description and attributes
         const grid = document.createElement('div');
-        grid.className = 'project-info-grid';
+        grid.className = 'story-info-grid';
         projectInfoContainer.appendChild(grid);
 
         // Project Description
         const descriptionComponent = document.createElement('div');
-        descriptionComponent.className = 'project-description-component';
+        descriptionComponent.className = 'story-description-component';
         grid.appendChild(descriptionComponent);
 
         const descriptionHeading = document.createElement('h5');
@@ -405,7 +405,7 @@ class ProjectInfo {
 
         // Tags
         const tagsContainerContainer = document.createElement('div');
-        tagsContainerContainer.className = 'project-tags-container';
+        tagsContainerContainer.className = 'story-tags-container';
         descriptionComponent.appendChild(tagsContainerContainer);
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'specialty-tags-flex-component';
@@ -421,7 +421,7 @@ class ProjectInfo {
 
         // Project Description
         const projectInfoGridColumn = document.createElement('div');
-        projectInfoGridColumn.className = 'project-info-grid-column';
+        projectInfoGridColumn.className = 'story-info-grid-column';
         grid.appendChild(projectInfoGridColumn);
 
         const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
@@ -429,7 +429,7 @@ class ProjectInfo {
         // Attributes
         for (let i = 0; i < 5; i++) {
             const attributeComponent = document.createElement('div');
-            attributeComponent.className = 'project-info-component project-info-component-area-' + (i + 1);
+            attributeComponent.className = 'story-info-component story-info-component-area-' + (i + 1);
         
             const attributeHeading = document.createElement('h5');
         
