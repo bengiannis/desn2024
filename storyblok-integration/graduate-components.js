@@ -13,29 +13,29 @@ class DividerLine {
     }
 }
 
-class ProjectInfo {
+class GraduateInfo {
     static generate(content) {
         const {
             name,
-            projectDescription,
-            designers,
+            pronouns,
+            workPreferences,
             designDisciplines,
-            createdFor,
-            yearCreated,
-            tools,
-            projectLength,
-            projectLink,
-            mainImage
+            portfolioWebsite,
+            email,
+            twitter,
+            linkedin,
+            biography,
+            instagram,
+            question1,
+            question2,
+            question3,
+            answer1,
+            answer2,
+            answer3,
         } = content;
 
         const projectInfoContainer = document.createElement('div');
         projectInfoContainer.className = 'story-info-container w-container';
-
-        // Project Title
-        const projectTitle = document.createElement('h1');
-        projectTitle.className = 'project-title';
-        projectTitle.textContent = name.replace(/\s(?=[^\s]*$)/, '\u00A0');
-        projectInfoContainer.appendChild(projectTitle);
 
         // Grid for project description and attributes
         const grid = document.createElement('div');
@@ -48,12 +48,12 @@ class ProjectInfo {
         grid.appendChild(descriptionComponent);
 
         const descriptionHeading = document.createElement('h5');
-        descriptionHeading.textContent = 'Description';
+        descriptionHeading.textContent = 'Bio';
         descriptionComponent.appendChild(descriptionHeading);
 
         const descriptionText = document.createElement('p');
         descriptionText.className = 'small-paragraph';
-        descriptionText.textContent = projectDescription.replace(/\s(?=[^\s]*$)/, '\u00A0');
+        descriptionText.textContent = biography.replace(/\s(?=[^\s]*$)/, '\u00A0');
         descriptionComponent.appendChild(descriptionText);
 
         // Tags
@@ -90,36 +90,50 @@ class ProjectInfo {
             attributeValue.className = 'small-paragraph';
 
             if (i == 0) {
-                attributeHeading.innerHTML = designers.length == 1 ? "Designer" : "Designers";
-                attributeValue.innerHTML = designers.map((s, i) => i ? s.replace(/ /g, '\u00A0') : s).join(', ');
+                attributeHeading.innerHTML = "Portfolio";
+
+                    let linkURL = "";
+                    let linkText = "";
+                    if (portfolioWebsite.linktype == "url") {
+                        linkURL = (portfolioWebsite["cached_url"].startsWith("http") ? "" : "https://") + portfolioWebsite["cached_url"];
+                        linkText = extractDomain(portfolioWebsite["cached_url"]);
+                    }
+
+                    attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
             }
             else if (i == 1) {
-                attributeHeading.innerHTML = "Created For";
-                attributeValue.innerHTML = `${createdFor}, ${yearCreated}`;
+                attributeHeading.innerHTML = "Email";
+                attributeValue.innerHTML = `<a href="mailto:${email}" target="_blank">${email}</a>`;
             }
-            else if (i == (projectLinkExists ? 2 : 3)) {
-                attributeHeading.innerHTML = "Tools Used";
-                attributeValue.innerHTML = tools.map((s, i) => i ? s.replace(/ /g, '\u00A0') : s).join(', ');
-            }
-            else if (i == (projectLinkExists ? 3 : 4)) {
-                attributeHeading.innerHTML = "Project Length";
-                attributeValue.innerHTML = projectLength;
-            }
-            else if (i == 4 && projectLinkExists) {
-                attributeHeading.innerHTML = "Project Link";
-
-                let linkURL = "";
-                let linkText = "";
-                if (projectLink.linktype == "story") {
-                    linkURL = "/" + projectLink["cached_url"];
-                    linkText = "Link";
+            else if (i == 2) {
+                attributeHeading.innerHTML = "Social";
+                let links = [];
+                if (twitter && twitter["cached_url"]) {
+                    links.push(createLinkHTML(twitter["cached_url"]));
                 }
-                else {
-                    linkURL = (projectLink["cached_url"].startsWith("http") ? "" : "https://") + projectLink["cached_url"];
-                    linkText = "Link";
+                if (instagram && instagram["cached_url"]) {
+                    links.push(createLinkHTML(instagram["cached_url"]));
                 }
+                if (linkedin && linkedin["cached_url"]) {
+                    links.push(createLinkHTML(linkedin["cached_url"]));
+                }
+                if (other && other["cached_url"]) {
+                    links.push(createLinkHTML(other["cached_url"]));
+                }                
 
-                attributeValue.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
+                attributeValue.innerHTML = links.join(', ');
+            }
+            else if (i == 3) {
+                attributeHeading.innerHTML = question1;
+                attributeValue.innerHTML = answer1;
+            }
+            else if (i == 4) {
+                attributeHeading.innerHTML = question2;
+                attributeValue.innerHTML = answer2;
+            }
+            else if (i == 5) {
+                attributeHeading.innerHTML = question3;
+                attributeValue.innerHTML = answer3;
             }
             else {
                 continue;
@@ -146,6 +160,28 @@ class ProjectInfo {
     }
 }
 
+function createLinkHTML(url) {
+    let linkURL = (url.startsWith("http") ? "" : "https://") + url;
+    let domainMap = {
+        "instagram.com": "Instagram",
+        "twitter.com": "Twitter",
+        "linkedin.com": "LinkedIn"
+    };
+    let domain = extractDomain(url)
+    let linkText = domainMap[domain] || domain; // Use the domain name as the fallback
+    return `<a href="${linkURL}" target="_blank">${linkText}</a>`;
+}
+
+
+function extractDomain(url) {
+    const hostname = new URL(url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`).hostname;
+    const parts = hostname.split('.').reverse();
+    if (parts.length > 2 && parts[1].length > 2) {
+      return `${parts[1]}.${parts[0]}`;
+    }
+    return hostname;
+}
+
 const components = {
     "divider_line": DividerLine
     // Add more components here
@@ -159,21 +195,13 @@ storyblokInstance.on(['published', 'change'], () => location.reload(true));
 async function fetchDataAndRender(version) {
     const editing = await isInEditor();
 
-    fetch(`https://api-us.storyblok.com/v2/cdn/stories/projects/${window.location.pathname.split('/').filter(Boolean).pop()}?token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`)
+    fetch(`https://api-us.storyblok.com/v2/cdn/stories/graduates/${window.location.pathname.split('/').filter(Boolean).pop()}?token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`)
     .then(response => response.json())
     .then(data => {        
-        document.getElementById("project-info-section").appendChild(ProjectInfo.generate({
+        document.getElementById("graduate-info-section").appendChild(GraduateInfo.generate({
             ...data.story.content,
             name: data.story.name,
         }));
-
-        const rootElement = document.getElementById("project-components");
-
-        data.story.content.body.forEach(content => {
-            if (components.hasOwnProperty(content.component)) {
-                rootElement.appendChild(components[content.component].generate(content));
-            }
-        });
     })
     .catch(error => console.error("Error fetching data:", error));
 };
