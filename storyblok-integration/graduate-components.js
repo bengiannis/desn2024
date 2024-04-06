@@ -144,17 +144,6 @@ class GraduateInfo {
             projectInfoGridColumn.appendChild(attributeComponent);
         }
 
-        // Project Hero
-        const heroContainer = document.createElement('div');
-        heroContainer.className = 'project-hero-container';
-        projectInfoContainer.appendChild(heroContainer);
-
-        const img = document.createElement('img');
-        img.src = mainImage.filename;
-        img.alt = mainImage.alt;
-        img.className = 'project-hero';
-        heroContainer.appendChild(img);
-
         return projectInfoContainer;
     }
 }
