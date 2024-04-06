@@ -49,7 +49,7 @@ class GraduateInfo {
         grid.appendChild(descriptionComponent);
 
         const descriptionHeading = document.createElement('h5');
-        descriptionHeading.textContent = 'Bio';
+        descriptionHeading.textContent = 'Biography';
         descriptionComponent.appendChild(descriptionHeading);
 
         const descriptionText = document.createElement('p');
@@ -79,7 +79,7 @@ class GraduateInfo {
         grid.appendChild(projectInfoGridColumn);
         
         // Attributes
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 6; i++) {
             const attributeComponent = document.createElement('div');
             attributeComponent.className = 'story-info-component story-info-component-area-' + (i + 1);
         
@@ -123,19 +123,16 @@ class GraduateInfo {
                 attributeValue.innerHTML = links.join(', ');
             }
             else if (i == 3) {
-                attributeHeading.innerHTML = question1;
-                attributeValue.innerHTML = answer1;
+                attributeHeading.innerHTML = question1.replace(/\s(?=[^\s]*$)/, '\u00A0');;
+                attributeValue.innerHTML = answer1.replace(/\s(?=[^\s]*$)/, '\u00A0');;
             }
             else if (i == 4) {
-                attributeHeading.innerHTML = question2;
-                attributeValue.innerHTML = answer2;
+                attributeHeading.innerHTML = question2.replace(/\s(?=[^\s]*$)/, '\u00A0');;
+                attributeValue.innerHTML = answer2.replace(/\s(?=[^\s]*$)/, '\u00A0');;
             }
             else if (i == 5) {
-                attributeHeading.innerHTML = question3;
-                attributeValue.innerHTML = answer3;
-            }
-            else {
-                continue;
+                attributeHeading.innerHTML = question3.replace(/\s(?=[^\s]*$)/, '\u00A0');;
+                attributeValue.innerHTML = answer3.replace(/\s(?=[^\s]*$)/, '\u00A0');;
             }
             
             attributeComponent.appendChild(attributeHeading);
