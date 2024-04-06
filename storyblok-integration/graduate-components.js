@@ -76,8 +76,6 @@ class GraduateInfo {
         const projectInfoGridColumn = document.createElement('div');
         projectInfoGridColumn.className = 'story-info-grid-column';
         grid.appendChild(projectInfoGridColumn);
-
-        const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
         
         // Attributes
         for (let i = 0; i < 5; i++) {
