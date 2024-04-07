@@ -217,8 +217,8 @@ const checkAndUpdateSection = () => {
 
   if (newZone !== currentZone) {
     currentTextSection = newSection;
-    shownFullTextAlready = false;
-    const immediately = (newSection == currentTextSection);
+    shownFullTextAlready = (newSection != currentTextSection);
+    const immediately = !shownFullTextAlready;
     animateToNewText(sectionTitles[currentTextSection], immediately);
   }
 };
