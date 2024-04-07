@@ -194,17 +194,15 @@ let targetGain = 1;
 let duration = 1000; // duration in milliseconds
 let phase = 0;
 let textToAnimateTo = "";
-let immediate = false;
 
-function animateToNewText(newText, immediately) {
-  immediate = immediately;
+function animateToNewText(newText) {
 	textToAnimateTo = newText;
 	startAnimation();
 }
 
 let currentTextSection = 0;
 
-const sectionTitles = ["It's Clear Now", "Resolution isn't just an exhibition", "It's a declaration of who we are", "And what design makes us"];
+const sectionTitles = ["It's Clear Now", "Resolution isn’t just an exhibition", "It's a declaration of who we are", "And what design makes us"];
 const heroContainer = document.getElementById("hero-container");
 
 const checkAndUpdateSection = () => {
@@ -214,7 +212,7 @@ const checkAndUpdateSection = () => {
 
   if (newSection !== currentTextSection) {
     currentTextSection = newSection;
-    animateToNewText(sectionTitles[currentTextSection], true);
+    animateToNewText(sectionTitles[currentTextSection]);
   }
 };
 
@@ -237,7 +235,7 @@ const animateGain = (timestamp) => {
         renderTextImageData(textToAnimateTo);
         initialGain = gain;
         targetGain = 0.25;
-        duration = immediate ? 50 : 800;
+        duration = 800;
         break;
       case 2:
         // Hold at 0 for 1 second
@@ -266,7 +264,7 @@ const startAnimation = () => {
   phase = 0;
   initialGain = gain; // Assuming 'gain' is defined elsewhere
   targetGain = 1;
-  duration = immediate ? 100 : 700;
+  duration = 700;
   startTime = null;
   animationFrameId = requestAnimationFrame(animateGain);
 };
