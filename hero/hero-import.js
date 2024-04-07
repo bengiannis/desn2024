@@ -215,11 +215,16 @@ const checkAndUpdateSection = () => {
   const newZone = Math.max(0, Math.min(Math.floor(window.scrollY / zoneHeight), 7));
   const newSection = Math.max(0, Math.min(Math.floor(newZone / 2), 3));
 
-  if (newZone !== currentZone) {
+  if (newSection !== currentTextSection) {
+    //animate to new text
     currentTextSection = newSection;
-    shownFullTextAlready = (newSection != currentTextSection);
-    const immediately = !shownFullTextAlready;
-    animateToNewText(sectionTitles[currentTextSection], immediately);
+    shownFullTextAlready = false;
+    animateToNewText(sectionTitles[currentTextSection], false);
+  }
+  else if (newZone !== currentZone) {
+    //just cut to the text
+    currentTextSection = newSection;
+    animateToNewText(sectionTitles[currentTextSection], true);
   }
 };
 
@@ -242,10 +247,10 @@ const animateGain = (timestamp) => {
         renderTextImageData(textToAnimateTo);
         initialGain = gain;
         targetGain = 0.25;
-        duration = immediate ? 50 : 800;
+        duration = 800;
         break;
       case 2:
-        // Hold at 0 for 1 second
+        // Hold at 0
         initialGain = gain;
         targetGain = 0.25;
         duration = 100;
@@ -269,10 +274,19 @@ const startAnimation = () => {
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
   }
-  phase = 0;
-  initialGain = gain; // Assuming 'gain' is defined elsewhere
-  targetGain = 1;
-  duration = immediate ? 100 : 700;
-  startTime = null;
+  if (immediate) {
+    phase = 1;
+    initialGain = gain;
+    targetGain = 0.25;
+    duration = 100;
+    startTime = null;
+  }
+  else {
+    phase = 0;
+    initialGain = gain; // Assuming 'gain' is defined elsewhere
+    targetGain = 1;
+    duration = 700;
+    startTime = null;
+  }
   animationFrameId = requestAnimationFrame(animateGain);
 };
