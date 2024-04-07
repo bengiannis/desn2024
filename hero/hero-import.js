@@ -215,15 +215,17 @@ const checkAndUpdateSection = () => {
   const newZone = Math.max(0, Math.min(Math.floor(window.scrollY / zoneHeight), 7));
   const newSection = Math.max(0, Math.min(Math.floor(newZone / 2), 3));
 
-  if (newSection !== currentTextSection) {
+  if (newSection != currentTextSection) {
     //animate to new text
     currentTextSection = newSection;
+    currentZone = newZone;
     shownFullTextAlready = false;
     animateToNewText(sectionTitles[currentTextSection], false);
   }
-  else if (newZone !== currentZone) {
+  else if (newZone != currentZone) {
     //just cut to the text
     currentTextSection = newSection;
+    currentZone = newZone;
     animateToNewText(sectionTitles[currentTextSection], true);
   }
 };
