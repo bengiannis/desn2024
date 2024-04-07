@@ -195,6 +195,7 @@ let duration = 1000; // duration in milliseconds
 let phase = 0;
 let textToAnimateTo = "";
 let immediate = false;
+let shownFullTextAlready = false;
 
 function animateToNewText(newText, immediately) {
   immediate = immediately;
@@ -202,6 +203,7 @@ function animateToNewText(newText, immediately) {
 	startAnimation();
 }
 
+let currentZone = 0;
 let currentTextSection = 0;
 
 const sectionTitles = ["It's Clear Now", "Resolution isn't just an exhibition", "It's a declaration of who we are", "And what design makes us"];
@@ -209,12 +211,15 @@ const heroContainer = document.getElementById("hero-container");
 
 const checkAndUpdateSection = () => {
   const heroHeight = heroContainer.offsetHeight - window.innerHeight;
-  const sectionHeight = heroHeight / 4;
-  const newSection = Math.min(Math.floor(window.scrollY / sectionHeight), 3);
+  const zoneHeight = heroHeight / 8;
+  const newZone = Math.max(0, Math.min(Math.floor(window.scrollY / zoneHeight), 7));
+  const newSection = Math.max(0, Math.min(Math.floor(newZone / 2), 3));
 
-  if (newSection !== currentTextSection) {
+  if (newZone !== currentZone) {
     currentTextSection = newSection;
-    animateToNewText(sectionTitles[currentTextSection], true);
+    shownFullTextAlready = false;
+    const immediately = (newSection == currentTextSection);
+    animateToNewText(sectionTitles[currentTextSection], immediately);
   }
 };
 
@@ -244,6 +249,7 @@ const animateGain = (timestamp) => {
         initialGain = gain;
         targetGain = 0.25;
         duration = 100;
+        shownFullTextAlready = true;
         break;
       case 3:
         // Animate to 0.5
