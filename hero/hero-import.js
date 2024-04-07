@@ -277,6 +277,7 @@ const startAnimation = () => {
     cancelAnimationFrame(animationFrameId);
   }
   if (immediate) {
+    renderTextImageData(textToAnimateTo);
     phase = 1;
     initialGain = gain;
     targetGain = 0.25;
