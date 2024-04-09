@@ -105,7 +105,6 @@ class GraduateInfo {
                 attributeValue.innerHTML = `<a href="mailto:${email}" target="_blank">${email}</a>`;
             }
             else if (i == 2) {
-                attributeHeading.innerHTML = "Social";
                 let links = [];
                 if (twitter && twitter["cached_url"]) {
                     links.push(createLinkHTML(twitter["cached_url"]));
@@ -118,8 +117,9 @@ class GraduateInfo {
                 }
                 if (other && other["cached_url"]) {
                     links.push(createLinkHTML(other["cached_url"]));
-                }                
+                }
 
+                attributeHeading.innerHTML = links.length ? "Social" : "";
                 attributeValue.innerHTML = links.join(', ');
             }
             else if (i == 3) {
@@ -149,13 +149,18 @@ function createLinkHTML(url) {
     let linkURL = (url.startsWith("http") ? "" : "https://") + url;
     let domainMap = {
         "instagram.com": "Instagram",
-        "twitter.com": "Twitter",
+        "twitter.com": "X / Twitter",
+        "x.com": "X / Twitter",
+        "threads.net": "Threads",
         "linkedin.com": "LinkedIn",
         "dribbble.com": "Dribbble",
         "behance.net": "Behance",
         "medium.com": "Medium",
         "youtube.com": "YouTube",
         "tiktok.com": "TikTok",
+        "reddit.com": "Reddit",
+        "discord.com": "Discord",
+        "discord.gg": "Discord",
         "facebook.com": "Facebook"
     };
     let domain = extractDomain(url)
