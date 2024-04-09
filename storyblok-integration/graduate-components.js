@@ -159,9 +159,12 @@ function createLinkHTML(url) {
         "youtube.com": "YouTube",
         "tiktok.com": "TikTok",
         "reddit.com": "Reddit",
+        "facebook.com": "Facebook",
+        "bento.me": "Bento.me",
+        "linktr.ee": "Linktree",
+        "read.cv": "Read.cv",
         "discord.com": "Discord",
-        "discord.gg": "Discord",
-        "facebook.com": "Facebook"
+        "discord.gg": "Discord"
     };
     let domain = extractDomain(url)
     let linkText = domainMap[domain] || domain; // Use the domain name as the fallback
