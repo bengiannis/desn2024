@@ -155,6 +155,7 @@ function createLinkHTML(url) {
         "behance.net": "Behance",
         "medium.com": "Medium",
         "youtube.com": "YouTube",
+        "tiktok.com": "TikTok",
         "facebook.com": "Facebook"
     };
     let domain = extractDomain(url)
