@@ -150,14 +150,37 @@ function createLinkHTML(url) {
     let domainMap = {
         "instagram.com": "Instagram",
         "twitter.com": "Twitter",
-        "linkedin.com": "LinkedIn"
+        "linkedin.com": "LinkedIn",
+        "dribbble.com": "Dribbble",
+        "behance.net": "Behance",
+        "medium.com": "Medium",
+        "youtube.com": "YouTube",
+        "facebook.com": "Facebook"
     };
     let domain = extractDomain(url)
     let linkText = domainMap[domain] || domain; // Use the domain name as the fallback
     return `<a href="${linkURL}" target="_blank">${linkText}</a>`;
 }
 
+function extractDomain(url) {
+    const hostname = new URL(url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`).hostname;
+    const parts = hostname.split('.').reverse();
 
+    if (parts.length >= 2) {
+        let domain = `${parts[1]}.${parts[0]}`;
+        if (parts.length > 2) {
+            // Join all parts except the 'www' and the TLD
+            const subdomainParts = parts.slice(2).reverse().filter(part => part !== 'www');
+            if (subdomainParts.length) {
+                domain = `${subdomainParts.join('.')}.${domain}`;
+            }
+        }
+        return domain;
+    }
+    return hostname;
+}
+
+/*
 function extractDomain(url) {
     const hostname = new URL(url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`).hostname;
     const parts = hostname.split('.').reverse();
@@ -165,7 +188,7 @@ function extractDomain(url) {
       return `${parts[1]}.${parts[0]}`;
     }
     return hostname;
-}
+}*/
 
 const components = {
     "divider_line": DividerLine
