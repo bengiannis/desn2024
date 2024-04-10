@@ -68,7 +68,7 @@ class GraduateInfo {
         designDisciplines.forEach(tag => {
             const tagElement = document.createElement('a');
             tagElement.className = 'specialty-tag';
-            tagElement.href = '#';
+            tagElement.href = `/graduates?filter=${tag.toLowerCase().replace(/[\s\/]/g, '-')}`;
             tagElement.textContent = tag;
             tagsContainer.appendChild(tagElement);
         });

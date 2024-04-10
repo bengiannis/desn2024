@@ -414,7 +414,7 @@ class ProjectInfo {
         designDisciplines.forEach(tag => {
             const tagElement = document.createElement('a');
             tagElement.className = 'specialty-tag';
-            tagElement.href = '#';
+            tagElement.href = `/projects?filter=${tag.toLowerCase().replace(/[\s\/]/g, '-')}`;
             tagElement.textContent = tag;
             tagsContainer.appendChild(tagElement);
         });
