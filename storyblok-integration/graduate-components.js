@@ -220,17 +220,17 @@ async function fetchDataAndRender(version) {
             name: data.story.name,
         }));
 
-        document.getElementById("short-title").textContent = data.story.shortTitle;
+        document.getElementById("short-title").textContent = data.story.content.shortTitle;
 
         let workStatus = "Open to ";
-        if (data.story.workPreferences.includes("Freelance")) {
-            workStatus += data.story.workPreferences.join(", ").replace(/, ([^,]*)$/, ', and $1') + " work";
+        if (data.story.content.workPreferences.includes("Freelance")) {
+            workStatus += data.story.content.workPreferences.join(", ").replace(/, ([^,]*)$/, ', and $1') + " work";
         } else {
-            workStatus += data.story.workPreferences.join(" and ") + " positions";
+            workStatus += data.story.content.workPreferences.join(" and ") + " positions";
         }
         document.getElementById("work-status").textContent = workStatus;
 
-        document.getElementById("pronouns").textContent = data.story.pronouns;
+        document.getElementById("pronouns").textContent = data.story.content.pronouns;
     })
     .catch(error => console.error("Error fetching data:", error));
 };
