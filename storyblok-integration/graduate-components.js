@@ -223,7 +223,7 @@ async function fetchDataAndRender(version) {
         document.getElementById("short-title").textContent = data.story.shortTitle;
 
         let workStatus = "Open to ";
-        if (workPreferences.includes("Freelance")) {
+        if (data.story.workPreferences.includes("Freelance")) {
             workStatus += data.story.workPreferences.join(", ").replace(/, ([^,]*)$/, ', and $1') + " work";
         } else {
             workStatus += data.story.workPreferences.join(" and ") + " positions";
