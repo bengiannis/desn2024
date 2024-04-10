@@ -219,6 +219,18 @@ async function fetchDataAndRender(version) {
             ...data.story.content,
             name: data.story.name,
         }));
+
+        document.getElementById("short-title").textContent = data.story.shortTitle;
+
+        let workStatus = "Open to ";
+        if (workPreferences.includes("Freelance")) {
+            workStatus += data.story.workPreferences.join(", ").replace(/, ([^,]*)$/, ', and $1') + " work";
+        } else {
+            workStatus += data.story.workPreferences.join(" and ") + " positions";
+        }
+        document.getElementById("work-status").textContent = workStatus;
+
+        document.getElementById("pronouns").textContent = data.story.pronouns;
     })
     .catch(error => console.error("Error fetching data:", error));
 };
