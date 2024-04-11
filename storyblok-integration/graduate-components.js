@@ -162,6 +162,10 @@ class ProjectCell {
         img.src = thumbnailImage.filename;
         img.classList.add('projects-cell-image');
         anchor.appendChild(img);
+
+        const divIndicator = document.createElement('div');
+        divIndicator.classList.add('projects-cell-select-indicator');
+        anchor.appendChild(divIndicator);
       
         const divName = document.createElement('div');
         divName.textContent = name;
