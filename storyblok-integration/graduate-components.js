@@ -155,18 +155,16 @@ class ProjectCell {
         } = content;
 
         const anchor = document.createElement('a');
-        anchor.href = '#';
+        anchor.href = `/projects/${slug}`;
         anchor.classList.add('projects-cell');
       
         const img = document.createElement('img');
-        img.src = "placeholder";
-        img.loading = "lazy";
-        img.alt = "";
+        img.src = thumbnailImage.filename;
         img.classList.add('projects-cell-image');
         anchor.appendChild(img);
       
         const divName = document.createElement('div');
-        divName.textContent = "placeholder";
+        divName.textContent = name;
         divName.classList.add('project-cell-name');
         anchor.appendChild(divName);
       
@@ -177,6 +175,7 @@ class ProjectCell {
       
         const divDisciplines = document.createElement('div');
         divDisciplines.classList.add('project-cell-disciplines');
+        divDisciplines.textContent = designDisciplines.join(", ");
         anchor.appendChild(divDisciplines);
       
         const divSubtitle = document.createElement('div');
@@ -277,7 +276,7 @@ async function fetchDataAndRender(version) {
 
         const fetchPromises = [];
 
-        for (const projectUUID of Object.keys(data.story.content.projects)) {
+        for (const projectUUID in data.story.content.projects) {
             const url = `https://api-us.storyblok.com/v2/cdn/stories/${projectUUID}?find_by=uuid&token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`;
             fetchPromises.push(fetch(url).then(response => response.json()));
         }
