@@ -276,7 +276,7 @@ async function fetchDataAndRender(version) {
 
         const fetchPromises = [];
 
-        for (const projectUUID in data.story.content.projects) {
+        for (const projectUUID of data.story.content.projects) {
             const url = `https://api-us.storyblok.com/v2/cdn/stories/${projectUUID}?find_by=uuid&token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`;
             fetchPromises.push(fetch(url).then(response => response.json()));
         }
