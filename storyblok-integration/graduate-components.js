@@ -169,7 +169,7 @@ class ProjectCell {
         anchor.appendChild(divName);
       
         const divSlug = document.createElement('div');
-        divSlug.textContent = "placeholder";
+        divSlug.textContent = slug;
         divSlug.classList.add('project-cell-slug');
         anchor.appendChild(divSlug);
       
@@ -179,7 +179,7 @@ class ProjectCell {
         anchor.appendChild(divDisciplines);
       
         const divSubtitle = document.createElement('div');
-        divSubtitle.textContent = "placeholder";
+        divSubtitle.textContent = designDisciplines.join(", ");
         divSubtitle.classList.add('project-cell-subtitle');
         anchor.appendChild(divSubtitle);
       
