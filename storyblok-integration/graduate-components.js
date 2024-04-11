@@ -145,6 +145,49 @@ class GraduateInfo {
     }
 }
 
+class ProjectCell {
+    static generate(content) {
+        const {
+            name,
+            slug,
+            thumbnailImage,
+            designDisciplines,
+        } = content;
+
+        const anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.classList.add('projects-cell');
+      
+        const img = document.createElement('img');
+        img.src = "placeholder";
+        img.loading = "lazy";
+        img.alt = "";
+        img.classList.add('projects-cell-image');
+        anchor.appendChild(img);
+      
+        const divName = document.createElement('div');
+        divName.textContent = "placeholder";
+        divName.classList.add('project-cell-name');
+        anchor.appendChild(divName);
+      
+        const divSlug = document.createElement('div');
+        divSlug.textContent = "placeholder";
+        divSlug.classList.add('project-cell-slug');
+        anchor.appendChild(divSlug);
+      
+        const divDisciplines = document.createElement('div');
+        divDisciplines.classList.add('project-cell-disciplines');
+        anchor.appendChild(divDisciplines);
+      
+        const divSubtitle = document.createElement('div');
+        divSubtitle.textContent = "placeholder";
+        divSubtitle.classList.add('project-cell-subtitle');
+        anchor.appendChild(divSubtitle);
+      
+        return anchor;
+      }
+}
+
 function createLinkHTML(url) {
     let linkURL = (url.startsWith("http") ? "" : "https://") + url;
     let domainMap = {
@@ -231,6 +274,28 @@ async function fetchDataAndRender(version) {
         document.getElementById("work-status").textContent = workStatus;
 
         document.getElementById("pronouns").textContent = data.story.content.pronouns;
+
+        const fetchPromises = [];
+
+        for (const projectUUID of Object.keys(data.story.content.projects)) {
+            const url = `https://api-us.storyblok.com/v2/cdn/stories/${projectUUID}?find_by=uuid&token=1bXsfgDSA3eGrDuGxB3coAtt&version=${editing ? "draft" : "published"}`;
+            fetchPromises.push(fetch(url).then(response => response.json()));
+        }
+
+        Promise.all(fetchPromises)
+            .then(results => {
+                // Now that all the fetches are completed, append the projects in order.
+                results.forEach(data => {
+                    document.getElementById("graduate-projects-grid").appendChild(ProjectCell.generate({
+                        ...data.story.content,
+                        name: data.story.name,
+                        slug: data.story.slug
+                    }));
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
     })
     .catch(error => console.error("Error fetching data:", error));
 };
