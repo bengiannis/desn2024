@@ -307,7 +307,9 @@ async function fetchDataAndRender(version) {
                     }));
                 });
 
-                document.getElementById("graduate-projects-section").style.display = "block";
+                if (results.length > 0) {
+                    document.getElementById("graduate-projects-section").style.display = "block";
+                }
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
