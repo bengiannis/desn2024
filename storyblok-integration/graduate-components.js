@@ -306,6 +306,8 @@ async function fetchDataAndRender(version) {
                         slug: data.story.slug
                     }));
                 });
+
+                document.getElementById("graduate-projects-section").style.display = "block";
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
