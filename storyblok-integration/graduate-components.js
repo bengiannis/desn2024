@@ -279,11 +279,11 @@ async function fetchDataAndRender(version) {
             document.getElementById("bts-photo").src = data.story.content.btsPhoto.filename;
             document.getElementById("bts-section").style.display = "block";
 
-            if (data.story.content.btsHeading) {
+            if (data.story.content.btsHeading.length > 0) {
                 document.getElementById("bts-heading").textContent = data.story.content.btsHeading;
                 document.getElementById("bts-heading").style.display = "block";
             }
-            if (data.story.content.btsCaption) {
+            if (data.story.content.btsCaption.length > 0) {
                 document.getElementById("bts-caption").textContent = data.story.content.btsCaption;
                 document.getElementById("bts-caption").style.display = "block";
             }
