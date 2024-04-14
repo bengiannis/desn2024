@@ -328,20 +328,25 @@ class Paragraph {
                 }
     
                 bodyItem.content.forEach(richTextItem => {
-                    let textContent = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');
-                    
-                    if (richTextItem.marks) {
-                        richTextItem.marks.forEach(mark => {
-                            if (mark.type === 'link') {
-                                textContent = `<a href="${mark.attrs.href}" target="_blank">${textContent}</a>`;
-                            }
-                            else if (mark.type === 'italic') {
-                                textContent = `<i>${textContent}</i>`;
-                            }
-                        });
+                    if (richTextItem.type == "text") {
+                        let text = richTextItem.text.replace(/\s(?=[^\s]*$)/, '\u00A0');
+                        
+                        if (richTextItem.marks) {
+                            richTextItem.marks.forEach(mark => {
+                                if (mark.type === 'link') {
+                                    text = `<a href="${mark.attrs.href}" target="_blank">${text}</a>`;
+                                }
+                                else if (mark.type === 'italic') {
+                                    text = `<i>${text}</i>`;
+                                }
+                            });
+                        }
+                        
+                        paragraph.innerHTML += text;
                     }
-                    
-                    paragraph.innerHTML += textContent;
+                    else if (richTextItem.type = "hard_break") {
+                        paragraph.innerHTML += "\n";
+                    }
                 });
     
                 textColumn.appendChild(paragraph);
