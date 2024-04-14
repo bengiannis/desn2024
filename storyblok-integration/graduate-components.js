@@ -16,9 +16,6 @@ class DividerLine {
 class GraduateInfo {
     static generate(content) {
         const {
-            name,
-            pronouns,
-            workPreferences,
             biography,
             designDisciplines,
             portfolioWebsite,
@@ -277,6 +274,20 @@ async function fetchDataAndRender(version) {
         document.getElementById("work-status").textContent = workStatus;
 
         document.getElementById("pronouns").textContent = data.story.content.pronouns;
+
+        if (data.story.content.btsPhoto.filename) {
+            document.getElementById("bts-photo").src = data.story.content.btsPhoto.filename;
+            document.getElementById("bts-section").style.display = "block";
+
+            if (data.story.content.btsHeading) {
+                document.getElementById("bts-heading").textContent = data.story.content.btsHeading;
+                document.getElementById("bts-heading").style.display = "block";
+            }
+            if (data.story.content.btsCaption) {
+                document.getElementById("bts-caption").textContent = data.story.content.btsCaption;
+                document.getElementById("bts-caption").style.display = "block";
+            }
+        }
 
         const fetchPromises = [];
 
