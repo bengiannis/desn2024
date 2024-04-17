@@ -456,7 +456,12 @@ class ProjectInfo {
 
             if (i == 0) {
                 attributeHeading.innerHTML = designers.length == 1 ? "Designer" : "Designers";
-                attributeValue.innerHTML = designers.map(s => `<a href="/graduates/${s.toLowerCase().replace(/ /g, '-')}">${s.replace(/ /g, '\u00A0')}</a>`).join(', ');
+                attributeValue.innerHTML = designers.map(s => 
+                    s === "Khadija Bari" 
+                    ? s.replace(/ /g, '\u00A0')
+                    : `<a href="/graduates/${s.toLowerCase().replace(/ /g, '-')}">${s.replace(/ /g, '\u00A0')}</a>`
+                ).join(', ');
+                
             }
             else if (i == 1) {
                 attributeHeading.innerHTML = "Created For";
