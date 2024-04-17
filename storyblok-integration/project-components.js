@@ -434,6 +434,14 @@ class ProjectInfo {
         projectInfoGridColumn.className = 'story-info-grid-column';
         grid.appendChild(projectInfoGridColumn);
 
+        const storyInfoComponentColumn1 = document.createElement('div');
+        storyInfoComponentColumn1.className = 'story-info-component-column story-info-component-column-1';
+        projectInfoGridColumn.appendChild(storyInfoComponentColumn1);
+
+        const storyInfoComponentColumn2 = document.createElement('div');
+        storyInfoComponentColumn2.className = 'story-info-component-column story-info-component-column-1';
+        projectInfoGridColumn.appendChild(storyInfoComponentColumn2);
+
         const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
         
         // Attributes
@@ -485,7 +493,7 @@ class ProjectInfo {
             attributeComponent.appendChild(attributeHeading);
             attributeComponent.appendChild(attributeValue);
 
-            projectInfoGridColumn.appendChild(attributeComponent);
+            (i < (projectLinkExists ? 3 : 2) ? storyInfoComponentColumn1 : storyInfoComponentColumn2).appendChild(attributeComponent);
         }
 
         // Project Hero

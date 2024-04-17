@@ -74,6 +74,14 @@ class GraduateInfo {
         const projectInfoGridColumn = document.createElement('div');
         projectInfoGridColumn.className = 'story-info-grid-column';
         grid.appendChild(projectInfoGridColumn);
+
+        const storyInfoComponentColumn1 = document.createElement('div');
+        storyInfoComponentColumn1.className = 'story-info-component-column story-info-component-column-1';
+        projectInfoGridColumn.appendChild(storyInfoComponentColumn1);
+
+        const storyInfoComponentColumn2 = document.createElement('div');
+        storyInfoComponentColumn2.className = 'story-info-component-column story-info-component-column-1';
+        projectInfoGridColumn.appendChild(storyInfoComponentColumn2);
         
         // Attributes
         for (let i = 0; i < 6; i++) {
@@ -135,7 +143,7 @@ class GraduateInfo {
             attributeComponent.appendChild(attributeHeading);
             attributeComponent.appendChild(attributeValue);
 
-            projectInfoGridColumn.appendChild(attributeComponent);
+            (i < 3 ? storyInfoComponentColumn1 : storyInfoComponentColumn2).appendChild(attributeComponent);
         }
 
         return projectInfoContainer;
