@@ -439,7 +439,7 @@ class ProjectInfo {
         projectInfoGridColumn.appendChild(storyInfoComponentColumn1);
 
         const storyInfoComponentColumn2 = document.createElement('div');
-        storyInfoComponentColumn2.className = 'story-info-component-column story-info-component-column-1';
+        storyInfoComponentColumn2.className = 'story-info-component-column story-info-component-column-2';
         projectInfoGridColumn.appendChild(storyInfoComponentColumn2);
 
         const projectLinkExists = projectLink && projectLink["cached_url"] && projectLink["cached_url"].trim() !== "";
