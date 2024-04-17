@@ -210,10 +210,15 @@ const sectionTitles = ["It's Clear Now", "Resolution isn't just an exhibition", 
 const heroContainer = document.getElementById("hero-container");
 
 const checkAndUpdateSection = () => {
-  const heroHeight = heroContainer.offsetHeight - window.innerHeight;
-  const zoneHeight = heroHeight / 8;
-  const newZone = Math.max(0, Math.min(Math.floor(window.scrollY / zoneHeight), 7));
-  const newSection = Math.max(0, Math.min(Math.floor(newZone / 2), 3));
+  let heroHeight = heroContainer.offsetHeight - window.innerHeight;
+  let zoneHeight = heroHeight / 8;
+  let newZone = Math.max(0, Math.min(Math.floor(window.scrollY / zoneHeight), 7));
+  let newSection = Math.max(0, Math.min(Math.floor(newZone / 2), 3));
+
+  if (window.innerHeight <= 767) {
+    newZone = 0;
+    newSection = 0;
+  }
 
   if (newSection != currentTextSection) {
     //animate to new text
