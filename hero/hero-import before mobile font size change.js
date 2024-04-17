@@ -16,7 +16,7 @@ let currentText = "";
 let currentTextImageData = {9: [], 18: [], 36: [], 72: [], 144: [], 288: []};
 let fractalNoiseLimits = {9: 1, 18: 0.48, 36: 0.36, 72: 0.24, 144: 0.20, 288: 0.16};
 
-const fontSize = width/24 + 80;
+const fontSize = width/20 + 64;
 
 let gain = 0.5;
 
