@@ -43,8 +43,8 @@ function windowResized() {
   const area = window.innerWidth * window.innerHeight;
   resizeFactor = area > threshold ? Math.sqrt(area / threshold) : 1;
   resizeCanvas(window.innerWidth/resizeFactor, window.innerHeight/resizeFactor);
-  canvas.canvas.style.transform = "scale(" + resizeFactor + ")";
-  canvas.canvas.style.transformOrigin = "0 0";
+  (canvas.canvas ? canvas.canvas : canvas).style.transform = "scale(" + resizeFactor + ")";
+  (canvas.canvas ? canvas.canvas : canvas).style.transformOrigin = "0 0";
 
   renderTextImageData();
 }
