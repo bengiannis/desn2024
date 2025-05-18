@@ -27,7 +27,7 @@ function preload() {
 async function setup() {
   await loadData(); // Wait for the data to load before setting up canvas
   canvas = createCanvas(window.innerWidth, window.innerHeight);
-  canvas.parent('hero');
+  canvas.parent('heroooooooooo');
   noSmooth();
   frameRate(30);
   windowResized();
